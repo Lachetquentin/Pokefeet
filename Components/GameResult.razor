@@ -1,0 +1,10 @@
+﻿<div class="flex-grow-1 d-flex flex-column justify-center mt-16 card">
+	<MudText Typo="Typo.body1" Class="@GetColorClassH1()" Style="text-align:center;">@_title</MudText>
+	<MudText Typo="Typo.body1" Style="text-align: center; white-space: nowrap" Class="pkmnBody">
+		@_desc <span class="@GetColorClass()">@PkmnName</span>
+	</MudText>
+	<div class="d-flex justify-center">
+		<MudImage Src="@GetPokemonImg(Pkmn.Id)" Width="128" Height="128" Elevation="25" Class="rounded-lg ma-4 imgSize card" />
+	</div>
+	<MudText Typo="Typo.caption" Style="text-align:center" Class="pkmnBody2">Le prochain Pokémon apparaîtra dans : @_countdownTime</MudText>
+</div>

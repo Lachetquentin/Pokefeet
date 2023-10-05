@@ -1,0 +1,109 @@
+﻿@page "/"
+@inject IJSRuntime Js
+@inject NavigationManager Navigation
+
+<MudGrid>
+	<MudItem xs="12">
+		<div class="flex-grow-1 d-flex flex-column justify-center align-center mt-16">
+			<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Today" OnClick="StartDaily" Class="mb-4 pkmnBody card btn">
+				Daily
+			</MudButton>
+		</div>
+	</MudItem>
+	<MudItem xs="12">
+		<div class="d-flex justify-center align-center">
+			<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Info" OnClick="OpenDialog" Class="pkmnBody card btn">
+				About
+			</MudButton>
+		</div>
+	</MudItem>
+</MudGrid>
+
+<MudDialog @bind-IsVisible="_visible" Options="_dialogOptions">
+	<TitleContent>
+	</TitleContent>
+	<DialogContent>
+
+		<MudText Typo="Typo.h5" Class="d-flex justify-center mb-2 pkmnH1">
+			ABOUT
+		</MudText>
+
+		<MudText Typo="Typo.body1" Class="mb-2 pkmnBody">
+			Welcome to the world of POKEMON!
+
+			<br /><br />
+
+			In this game, you will be presented with mysterious Pokémon footprints, and it's your task to identify the Pokémon associated with each footprint. Put your Pokémon knowledge to the test and see how many you can guess correctly!
+		</MudText>
+
+		<MudDivider />
+
+		<MudText Typo="Typo.h5" Class="d-flex justify-center mt-2 mb-2 pkmnH1">
+			HOW TO PLAY
+		</MudText>
+
+		<MudText Typo="Typo.body1" Class="mb-2 pkmnBody">
+			<b>Guess the Pokémon:</b> Initially, you will be shown a Pokémon footprint with no additional clues. Take your best guess at the Pokémon's name. For example, if you see a footprint that looks like it could be Pikachu's, type "Pikachu" and hit submit.
+
+			<br />
+
+			<b>Correct Guess:</b> If your guess is correct, congratulations! You've identified the Pokémon. You can now proceed to the next footprint. Your correct guesses will be counted, so keep track of your score as you go along.
+
+			<br />
+
+			<b>Wrong Guess:</b> If you guess incorrectly, don't worry. You have a limited number of tries. After five wrong guesses, the game ends.
+
+			<br />
+
+			<b>Continue Playing:</b> Keep making correct guesses to increase your score and advance through the Pokémon footprints. The more you guess correctly, the higher your score will be.
+
+			<br />
+
+			<b>Game Over:</b> When you reach five incorrect guesses, the game will end. Your final score will be displayed, showing how many Pokémon footprints you correctly identified.
+		</MudText>
+
+		<MudDivider />
+
+		<MudText Typo="Typo.h5" Class="d-flex justify-center mt-2 mb-2 pkmnH1">
+			CAN YOU GUESS THEM ALL ?
+		</MudText>
+
+		<MudText Typo="Typo.body1" Class="mb-2 pkmnBody">
+			Challenge yourself and see if you can identify all the Pokémon by their footprints. Good luck, Pokémon Trainer!
+		</MudText>
+
+		<MudDivider />
+
+		<MudText Typo="Typo.h5" Class="d-flex justify-center mt-2 mb-2 pkmnH1">
+			CREDIT
+		</MudText>
+
+		<MudText Typo="Typo.body1" Class="mb-2 pkmnBody">
+			Pokefeet is created by
+			<MudLink Href="https://github.com/Lachetquentin" Class="pkmnBody">
+				<MudIcon Icon="@Icons.Custom.Brands.GitHub" Title="GitHub" />
+				Quentin LACHET.
+			</MudLink>
+		</MudText>
+
+		<MudText Typo="Typo.body1" Class="pkmnBody">
+			Pokefeet is heavily inspired by the following sites:
+			<MudLink Href="https://pokedle.gg/" Class="pkmnBody">pokedle.gg</MudLink>,
+			<MudLink Href="https://loldle.net/" Class="pkmnBody">loldle.net</MudLink>,
+			<MudLink Href="https://www.nytimes.com/games/wordle/index.html" Class="pkmnBody">wordle</MudLink>
+		</MudText>
+
+		<MudText Typo="Typo.body1" Class="pkmnBody">Source code:<MudLink Href="https://github.com/pokefeet/pokefeet.github.io" Class="pkmnBody">Click here</MudLink></MudText>
+
+		<MudText Typo="Typo.body1" Class="pkmnBody">
+			<span class="pkmnBody" style="font-weight: 700">Thanks to:</span>
+			<br>
+			<MudText Typo="Typo.body1" Class="pkmnBody">- vinztt: <MudLink Href="https://codepen.io/vinztt/pen/XjEyvZ" Class="pkmnBody">Pokeball loading</MudLink></MudText>
+			<br>
+		</MudText>
+
+	</DialogContent>
+	<DialogActions>
+		<MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Close" Class="px-10 pkmnBody">Close</MudButton>
+	</DialogActions>
+</MudDialog>

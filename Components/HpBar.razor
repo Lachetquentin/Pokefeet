@@ -1,0 +1,33 @@
+﻿<div class="pokemon-life-bar d-flex flex-column card pl-4 pr-2">
+	
+	<div class="text-container" style="width: 100%;">
+		<div class="left-text pkmnText">PLAYER</div>
+		<div class="right-text pkmnText">Lv1</div>
+	</div>
+
+	<div class="hp-bar">
+		<div class="hp-label pr-1">HP</div>
+		<div class="@GetHpColorClass(HpLeft)" style="width: @CalculateHpPercentage(HpLeft, MaxHp)%"></div>
+	</div>
+
+	<MudText Typo="Typo.body1" Class="pkmnText" Align="Align.Right" Style="Width: 100%;">@HpLeft / @MaxHp</MudText>
+
+</div>
+
+<style>
+	.text-container {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.left-text {
+		flex: 1;
+		text-align: left;
+	}
+
+	.right-text {
+		flex: 1; 
+		text-align: right;
+	}
+
+</style>

@@ -1,0 +1,93 @@
+﻿@inject NavigationManager Navigation
+@inject IJSRuntime Js
+@page "/daily"
+
+@if (_isLoading)
+{
+	<PokeballLoading/>
+}
+else
+{
+	@if (_gameOver)
+	{
+		if (_pokemonInfo != null && _pokemonName != null)
+		{
+			<GameResult HasWin="@false" Pkmn="@_pokemonInfo" PkmnName="@_pokemonName"/>
+		}
+	}
+	else if (_gameWon)
+	{
+		if (_pokemonInfo != null && _pokemonName != null)
+		{
+			<GameResult HasWin="@true" Pkmn="@_pokemonInfo" PkmnName="@_pokemonName"/>
+		}
+	}
+	else
+	{
+		<div class="flex-grow-1 d-flex flex-column justify-center mt-16">
+
+			<div class="d-flex justify-center">
+				<HpBar HpLeft="_player.GetLife()" MaxHp="8" />
+			</div>
+
+			<div class="d-flex justify-center">
+				<MudImage Src="@ImgPath" Width="128" Height="128" Elevation="25" Class="rounded-lg ma-4 imgSize card" />
+			</div>
+
+			<MudTextField @bind-Value="PlayerAnswer" T="string" 
+			              OnKeyUp="ValidSubmit" Immediate="true"
+			              DisableUnderLine="true" Placeholder="Who's that pokemon?"
+			              Class="ml-2 mr-2 card" Variant="Variant.Outlined" 
+			              AutoFocus TextUpdateSuppression="false" Margin="Margin.None" />
+
+			<div class="@GetSearchClass()" style="max-height: 150px; overflow-y: auto;">
+				@foreach (var item in _filteredItems)
+				{
+					<div @onclick="() => SelectItem(item)" style="height: 52px;" class="d-flex align-center">
+						<img style="width: 70px; height: 70px; margin-left: 1.25rem;" src="@GetPokemonImg(item.Id)" alt="@item.Name" />
+						<p style="margin-left: 1.25rem;" class="pkmnBody">
+							@item.Name
+						</p>
+					</div>
+				}
+			</div>
+
+		</div>
+	}
+
+	@if (_guessStarted)
+	{
+		<div class="grid-container mt-2">
+				<div class="header-container pkmnBody2">
+					<div class="header">Pokemon</div>
+					<div class="header">Type 1</div>
+					<div class="header">Type 2</div>
+					<div class="header">Color</div>
+					<div class="header">Légendaire</div>
+					<div class="header">Mythique</div>
+					<div class="header">Génération</div>
+				</div>
+
+				@foreach (var pokemon in _pokemonList)
+				{
+					<div class="header-container pkmnText">
+						<div class="row-card">
+							<img src="@GetPokemonImg(pokemon.Id)" alt="@pokemon.Name" />
+						</div>
+						<div class="@GetRowClass(pokemon, "Type1")">@pokemon.Type1</div>
+						<div class="@GetRowClass(pokemon, "Type2")">@pokemon.Type2</div>
+						<div class="@GetRowClass(pokemon, "Color")">@pokemon.Color</div>
+						<div class="@GetRowClass(pokemon, "IsLegendary")">@pokemon.IsLegendary</div>
+						<div class="@GetRowClass(pokemon, "IsMythical")">@pokemon.IsMythical</div>
+						<div class="@GetRowClass(pokemon, "Generation")">@pokemon.Generation</div>
+					</div>
+				}
+		</div>
+	}
+
+	<div class="d-flex justify-center mt-2">
+		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.ArrowBack" OnClick="GoBack" Class="pkmnBody card btn">
+			Back
+		</MudButton>
+	</div>
+}

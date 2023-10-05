@@ -1,0 +1,261 @@
+﻿.imgbg {
+    background-image: url(/img/bg.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.btn {
+    width: 200px;
+    height: 60px;
+}
+
+.card {
+    display: flex !important;
+    border-radius: .25rem !important;
+    border-width: 2px !important;
+    border-style: solid !important;
+    border-color: black !important;
+    background-color: white !important;
+    color: black !important;
+}
+
+.card-search {
+    border-radius: .25rem;
+    border-width: 2px;
+    border-style: solid ;
+    border-color: black ;
+    background-color: white ;
+    color: black ;
+}
+
+.centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.grow {
+    transition: transform 0.3s ease;
+}
+
+    .grow:hover {
+        transform: scale(1.1);
+    }
+
+input {
+    font-size: 20px !important;
+}
+
+.grid-container {
+    display: grid;
+    gap: 10px;
+    white-space: nowrap;
+}
+
+.header-container {
+    display: grid;
+    grid-template-columns: repeat(7, auto);
+    border-radius: .25rem;
+    border-width: 2px;
+    border-style: solid;
+    border-color: black;
+    background-color: white;
+    color: black;
+}
+
+.header {
+    padding: 10px;
+    margin: 8px;
+    border-bottom-width: 2px;
+    border-style: solid;
+}
+
+.row-container {
+    display: grid;
+    grid-template-columns: repeat(7, auto);
+}
+
+.row-card {
+    margin: 8px;
+    border-radius: .25rem;
+    border-width: 2px;
+    border-style: solid;
+    border-color: black;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+}
+
+    .row-card.green {
+        background-color: rgb(70, 217, 48);
+    }
+
+    .row-card.red {
+        background-color: rgb(237, 59, 43);
+    }
+
+/* HP BAR */
+
+.pokemon-life-bar {
+    display: flex;
+    align-items: center;
+}
+
+.hp-bar {
+    width: 150px;
+    height: 20px;
+    border: 2px solid black;
+    background-color: black;
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.hp-label {
+    font-weight: bold;
+    margin-left: 8px;
+    color: orange;
+}
+
+.hp-fill {
+    height: 100%;
+    transition: width 0.5s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .hp-fill.green {
+        background-color: green;
+        color: white;
+    }
+
+    .hp-fill.orange {
+        background-color: orange;
+        color: white;
+    }
+
+    .hp-fill.red {
+        background-color: red;
+        color: white;
+    }
+
+/* HP BAR */
+
+/* FONT */
+
+@font-face {
+    font-family: 'Pkmn';
+    src: url('PokmonEmeraldPro.woff2') format('woff2'),
+        url('PokmonEmeraldPro.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+.pkmn {
+  font-family: 'Pkmn' !important;
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+    font-family: 'Pkmn', Arial, sans-serif !important;
+}
+
+.pkmnH1 {
+    font-size: 32px !important;
+}
+
+.pkmnBody {
+    font-size: 20px !important;
+}
+
+.pkmnBody2 {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+}
+
+.pkmnText {
+    font-size: 16px !important;
+}
+
+/* FONT */
+
+.victory {
+    color: green;
+}
+
+.defeat {
+    color: red;
+}
+
+/* LOADING */
+
+.wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.pokeball {
+    width: 60px;
+    height: 60px;
+    background-color: #fff;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+    border: 3px solid;
+    animation: frames .8s linear 0s infinite;
+}
+
+.pokeball:after {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 30px;
+    background-color: red;
+    border-bottom: 4px solid;
+    top: -4px
+}
+
+.pokeball:before {
+    content: '';
+    position: absolute;
+    background-color: #fff;
+    width: 10px;
+    height: 10px;
+    border: 4px solid;
+    border-radius: 50%;
+    bottom: 18px;
+    right: 18px;
+    z-index: 1;
+}
+
+/* AnimationFrames */
+@keyframes frames {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

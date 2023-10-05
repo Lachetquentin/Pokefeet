@@ -1,0 +1,17 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="d-flex flex-column align-center">
+	<div class="d-flex justify-center align-center mt-4">
+		<a href="/">
+			<MudImage Src="img/logo.png" Alt="Logo" Class="grow" />
+		</a>
+	</div>
+
+	<div class="pa-8" style="width: 500px;">
+		@Body
+	</div>
+</MudContainer>
