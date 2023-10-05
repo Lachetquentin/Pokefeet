@@ -9,7 +9,7 @@ using static Pokefeet2.Class.PkmnFetch;
 
 namespace Pokefeet2.Components;
 
-partial class Game
+partial class DailyGame
 {
 	#region Inject
 
