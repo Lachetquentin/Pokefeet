@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Pokefeet2.Class;
+using Pokefeet2.Ressources;
 using static Pokefeet2.Class.PkmnFetch;
 
 namespace Pokefeet2.Components;
@@ -13,8 +15,7 @@ partial class GameResult : IDisposable
 
 	Timer? _countdownTimer;
 
-	[Parameter]
-	public bool HasWin {get;set;}
+	[Parameter] public bool HasWin { get; set; }
 
 	[Parameter] public PokemonInfo Pkmn { get; set; } = default!;
 
@@ -28,13 +29,13 @@ partial class GameResult : IDisposable
 
 		if (HasWin)
 		{
-			_title = "VICTOIRE !";
-			_desc = "Tu as deviné:";
+			_title = Translation.Victory.ToUpper();
+			_desc = Translation.YouGuessed;
 		}
 		else
 		{
-			_title = "DÉFAITE !";
-			_desc = "Tu n'as pas deviné:";
+			_title = Translation.Defeat.ToUpper();
+			_desc = Translation.NoGuessed;
 		}
 
 		StartCountdown();
@@ -77,5 +78,5 @@ partial class GameResult : IDisposable
 		}
 	}
 
-	static string GetPokemonImg(int pokemonId) => $"/img/sprites/{pokemonId}.png";
+	static string GetPokemonImg(int pokemonId) => $"{Constants.Path.RootSprite}{pokemonId}.png";
 }

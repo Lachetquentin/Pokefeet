@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Pokefeet2.Class;
 
 namespace Pokefeet2.Components;
 
 partial class HpBar
 {
 	[Parameter] public int HpLeft { get; set; }
-	[Parameter] public int MaxHp { get; set; }
+	int _maxHp = Constants.Player.MaxHp;
 
 	static string CalculateHpPercentage(int hpLeft, int maxHp)
 	{
@@ -29,7 +30,7 @@ partial class HpBar
 	{
 		string colorClass = "hp-fill";
 
-		double percentage = CalculateHpPercentageDouble(hpLeft, MaxHp);
+		double percentage = CalculateHpPercentageDouble(hpLeft, _maxHp);
 
 		return percentage switch
 		{

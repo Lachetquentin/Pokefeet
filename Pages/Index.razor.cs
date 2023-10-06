@@ -1,5 +1,6 @@
 ﻿using Microsoft.JSInterop;
 using MudBlazor;
+using Pokefeet2.Class;
 
 namespace Pokefeet2.Pages;
 
@@ -14,19 +15,19 @@ partial class Index
 	{
 		if (firstRender)
 		{
-			_jsRef = await Js.InvokeAsync<IJSObjectReference>("import", "./scripts/localstorage.js");
+			_jsRef = await Js.InvokeAsync<IJSObjectReference>(Constants.Javascript.Import, Constants.Javascript.ImportPath);
 
 			if (_jsRef != null)
 			{
-				await _jsRef.InvokeVoidAsync("checkLastPlayedDate");
-				await _jsRef.InvokeVoidAsync("checkHasWinClassic");
-				await _jsRef.InvokeVoidAsync("checkPokemonGuesses");
-				await _jsRef.InvokeVoidAsync("checkDaily");
+				await _jsRef.InvokeVoidAsync(Constants.Javascript.CheckLastPlayedDate);
+				await _jsRef.InvokeVoidAsync(Constants.Javascript.CheckHasWinClassic);
+				await _jsRef.InvokeVoidAsync(Constants.Javascript.CheckPokemonGuesses);
+				await _jsRef.InvokeVoidAsync(Constants.Javascript.CheckDaily);
 			}
 		}
 	}
 
 	void Close() => _visible = false;
 	void OpenDialog() => _visible = true;
-	void StartDaily() => Navigation.NavigateTo("/daily");
+	void StartDaily() => Navigation.NavigateTo(Constants.Url.Daily);
 }

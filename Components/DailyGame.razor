@@ -1,6 +1,7 @@
-﻿@inject NavigationManager Navigation
+﻿@using Pokefeet2.Ressources
+@inject NavigationManager Navigation
 @inject IJSRuntime Js
-@page "/daily"
+@attribute [Route(Constants.Url.Daily)]
 
 @if (_isLoading)
 {
@@ -27,7 +28,7 @@ else
 		<div class="flex-grow-1 d-flex flex-column justify-center mt-16">
 
 			<div class="d-flex justify-center">
-				<HpBar HpLeft="_player.GetLife()" MaxHp="8" />
+				<HpBar HpLeft="_player.GetLife()" />
 			</div>
 
 			<div class="d-flex justify-center">
@@ -36,7 +37,7 @@ else
 
 			<MudTextField @bind-Value="PlayerAnswer" T="string" 
 			              OnKeyUp="ValidSubmit" Immediate="true"
-			              DisableUnderLine="true" Placeholder="Who's that pokemon?"
+			              DisableUnderLine="true" Placeholder="@Translation.WhosThatPokemon"
 			              Class="ml-2 mr-2 card" Variant="Variant.Outlined" 
 			              AutoFocus TextUpdateSuppression="false" Margin="Margin.None" />
 
@@ -62,10 +63,10 @@ else
 					<div class="header">Pokemon</div>
 					<div class="header">Type 1</div>
 					<div class="header">Type 2</div>
-					<div class="header">Color</div>
-					<div class="header">Légendaire</div>
-					<div class="header">Mythique</div>
-					<div class="header">Génération</div>
+					<div class="header">@Translation.Color</div>
+					<div class="header">@Translation.Legendary</div>
+					<div class="header">@Translation.Mythical</div>
+					<div class="header">@Translation.Generation</div>
 				</div>
 
 				@foreach (var pokemon in _pokemonList)
@@ -74,12 +75,12 @@ else
 						<div class="row-card">
 							<img src="@GetPokemonImg(pokemon.Id)" alt="@pokemon.Name" />
 						</div>
-						<div class="@GetRowClass(pokemon, "Type1")">@pokemon.Type1</div>
-						<div class="@GetRowClass(pokemon, "Type2")">@pokemon.Type2</div>
-						<div class="@GetRowClass(pokemon, "Color")">@pokemon.Color</div>
-						<div class="@GetRowClass(pokemon, "IsLegendary")">@pokemon.IsLegendary</div>
-						<div class="@GetRowClass(pokemon, "IsMythical")">@pokemon.IsMythical</div>
-						<div class="@GetRowClass(pokemon, "Generation")">@pokemon.Generation</div>
+						<div class="@GetRowClass(pokemon, Constants.PokemonCategories.Type1)">@pokemon.Type1</div>
+						<div class="@GetRowClass(pokemon,Constants.PokemonCategories.Type2)">@pokemon.Type2</div>
+						<div class="@GetRowClass(pokemon, Constants.PokemonCategories.Color)">@pokemon.Color</div>
+						<div class="@GetRowClass(pokemon, Constants.PokemonCategories.IsLegendary)">@TranslateBool(pokemon.IsLegendary)</div>
+						<div class="@GetRowClass(pokemon, Constants.PokemonCategories.IsMythical)">@TranslateBool(pokemon.IsMythical)</div>
+						<div class="@GetRowClass(pokemon, Constants.PokemonCategories.Generation)">@pokemon.Generation</div>
 					</div>
 				}
 		</div>
@@ -87,7 +88,7 @@ else
 
 	<div class="d-flex justify-center mt-2">
 		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.ArrowBack" OnClick="GoBack" Class="pkmnBody card btn">
-			Back
+			@Translation.Back
 		</MudButton>
 	</div>
 }

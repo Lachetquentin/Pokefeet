@@ -1,16 +1,17 @@
-﻿<div class="pokemon-life-bar d-flex flex-column card pl-4 pr-2">
+﻿@using Pokefeet2.Ressources
+<div class="pokemon-life-bar d-flex flex-column card pl-4 pr-2">
 	
 	<div class="text-container" style="width: 100%;">
-		<div class="left-text pkmnText">PLAYER</div>
+		<div class="left-text pkmnText">@Translation.Player.ToUpper()</div>
 		<div class="right-text pkmnText">Lv1</div>
 	</div>
 
 	<div class="hp-bar">
 		<div class="hp-label pr-1">HP</div>
-		<div class="@GetHpColorClass(HpLeft)" style="width: @CalculateHpPercentage(HpLeft, MaxHp)%"></div>
+		<div class="@GetHpColorClass(HpLeft)" style="width: @CalculateHpPercentage(HpLeft, _maxHp)%"></div>
 	</div>
 
-	<MudText Typo="Typo.body1" Class="pkmnText" Align="Align.Right" Style="Width: 100%;">@HpLeft / @MaxHp</MudText>
+	<MudText Typo="Typo.body1" Class="pkmnText" Align="Align.Right" Style="Width: 100%;">@HpLeft / @_maxHp</MudText>
 
 </div>
 

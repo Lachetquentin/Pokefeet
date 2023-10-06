@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using Pokefeet2.Class;
+using Pokefeet2.Ressources;
 using static Pokefeet2.Class.PkmnFetch;
 
 namespace Pokefeet2.Components;
@@ -38,16 +39,16 @@ partial class DailyGame
 	{
 		if (firstRender)
 		{
-			_jsRef = await Js.InvokeAsync<IJSObjectReference>("import", "./scripts/localstorage.js");
+			_jsRef = await Js.InvokeAsync<IJSObjectReference>(Constants.Javascript.Import, Constants.Javascript.ImportPath);
 			
 			if (_jsRef != null)
 			{
-				_hasWinClassic = await _jsRef.InvokeAsync<string>("getLocal", "hasWinClassic");
+				_hasWinClassic = await _jsRef.InvokeAsync<string>(Constants.Javascript.GetLocal, Constants.Javascript.HasWinClassic);
 
 				_pokemons = await PkmnFetchApi.GetAllPokemons() ?? new List<PokemonInfo>();
 				Dictionary<int, PokemonInfo> pokemonDictionary = _pokemons.ToDictionary(p => p.Id);
 
-				string? pokemonGuessesJson = await _jsRef.InvokeAsync<string>("getLocal", "pokemonGuesses");
+				string? pokemonGuessesJson = await _jsRef.InvokeAsync<string>(Constants.Javascript.GetLocal, Constants.Javascript.PokemonGuesses);
 
 				if (!string.IsNullOrEmpty(pokemonGuessesJson))
 				{
@@ -88,10 +89,10 @@ partial class DailyGame
 	{
 		_apiResponse = await PkmnFetchApi.GetDailyDataAsync();
 
-		if (_apiResponse == null) ImgPath = "/img/footprints/1.png";
-		if (_apiResponse?.Name == "_") ImgPath = "/img/footprints/1.png";
+		if (_apiResponse == null) ImgPath = Constants.Path.DefaultFootprint;
+		if (_apiResponse?.Name == "_") ImgPath = Constants.Path.DefaultFootprint;
 
-		ImgPath = $"/img/footprints/{_apiResponse?.Name}.png";
+		ImgPath = $"{Constants.Path.RootFootprint}{_apiResponse?.Name}.png";
 
 		if (_apiResponse?.Name != null)
 			_pokemonInfo = await PkmnFetchApi.GetPokemonInfo(_apiResponse.Name);
@@ -128,13 +129,12 @@ partial class DailyGame
 
 		switch (propertyName)
 		{
-			case "Pokemon" when _pokemonInfo != null && pokemon.Name == _pokemonInfo.Name:
-			case "Type1" when _pokemonInfo != null && pokemon.Type1 == _pokemonInfo.Type1:
-			case "Type2" when _pokemonInfo != null && pokemon.Type2 == _pokemonInfo.Type2:
-			case "Color" when _pokemonInfo != null && pokemon.Color == _pokemonInfo.Color:
-			case "IsLegendary" when _pokemonInfo != null && pokemon.IsLegendary == _pokemonInfo.IsLegendary:
-			case "IsMythical" when _pokemonInfo != null && pokemon.IsMythical == _pokemonInfo.IsMythical:
-			case "Generation" when _pokemonInfo != null && pokemon.Generation == _pokemonInfo.Generation:
+			case Constants.PokemonCategories.Type1 when _pokemonInfo != null && pokemon.Type1 == _pokemonInfo.Type1:
+			case Constants.PokemonCategories.Type2 when _pokemonInfo != null && pokemon.Type2 == _pokemonInfo.Type2:
+			case Constants.PokemonCategories.Color when _pokemonInfo != null && pokemon.Color == _pokemonInfo.Color:
+			case Constants.PokemonCategories.IsLegendary when _pokemonInfo != null && pokemon.IsLegendary == _pokemonInfo.IsLegendary:
+			case Constants.PokemonCategories.IsMythical when _pokemonInfo != null && pokemon.IsMythical == _pokemonInfo.IsMythical:
+			case Constants.PokemonCategories.Generation when _pokemonInfo != null && pokemon.Generation == _pokemonInfo.Generation:
 				return green;
 			default:
 				return red;
@@ -143,7 +143,7 @@ partial class DailyGame
 
 	string GetSearchClass() => _filteredItems.Count > 0 ? "card-search mt-1" : "";
 
-	void GoBack() => Navigation.NavigateTo("/");
+	void GoBack() => Navigation.NavigateTo(Constants.Url.Home);
 
 	void Search()
 	{
@@ -174,7 +174,7 @@ partial class DailyGame
 			if (_pokemonInfo != null && PlayerAnswer.Equals(_pokemonInfo.Name))
 			{
 				_gameWon = true;
-				if (_jsRef != null) await _jsRef.InvokeVoidAsync("saveLocal", "hasWinClassic", "1");
+				if (_jsRef != null) await _jsRef.InvokeVoidAsync(Constants.Javascript.SaveLocal, Constants.Javascript.HasWinClassic, "1");
 			}
 			else
 			{
@@ -183,7 +183,7 @@ partial class DailyGame
 				if (_player.GetLife() == 0)
 				{
 					_gameOver = true;
-					if (_jsRef != null) await _jsRef.InvokeVoidAsync("saveLocal", "hasWinClassic", "2");
+					if (_jsRef != null) await _jsRef.InvokeVoidAsync(Constants.Javascript.SaveLocal, Constants.Javascript.HasWinClassic, "2");
 				}
 			}
 
@@ -193,7 +193,7 @@ partial class DailyGame
 			if (_jsRef != null)
 			{
 				if (pkmn != null)
-					await _jsRef.InvokeVoidAsync("addPokemonGuess", pkmn.Id);
+					await _jsRef.InvokeVoidAsync(Constants.Javascript.AddPokemonGuess, pkmn.Id);
 			}
 
 			_filteredItems.Clear();
@@ -219,5 +219,7 @@ partial class DailyGame
 		await SubmitAnswer(_filteredItems.First());
 	}
 
-	static string GetPokemonImg(int pokemonId) => $"/img/sprites/{pokemonId}.png";
+	static string GetPokemonImg(int pokemonId) => $"{Constants.Path.RootSprite}{pokemonId}.png";
+
+	static string TranslateBool(bool value) => value ? Translation.Yes : Translation.No;
 }

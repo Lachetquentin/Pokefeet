@@ -1,5 +1,5 @@
 ﻿const currentDate = new Date().toLocaleDateString();
-const lastPlayedDate = localStorage.getItem('lastPlayedDate');
+var lastPlayedDate = localStorage.getItem('lastPlayedDate');
 
 export function addPokemonGuess(newGuess) {
   var jsonPokemonGuesses = localStorage.getItem("pokemonGuesses");
@@ -35,6 +35,7 @@ export function checkDaily() {
         localStorage.setItem('hasWinClassic', '0');
         localStorage.setItem('lastPlayedDate', currentDate);
         localStorage.setItem('pokemonGuesses', []);
+        lastPlayedDate = currentDate;
     }
 }
 

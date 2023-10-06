@@ -2,7 +2,7 @@
 
 public class Player
 {
-	int Life { get; set; } = 8;
+	int Life { get; set; } = Constants.Player.MaxHp;
 	int Points { get; set; }
 
 	public void AddPts() => Points++;
@@ -13,7 +13,7 @@ public class Player
 
 	public void Reset()
 	{
-		Points = 0;
-		Life = 8;
+		Points = Constants.Player.Points;
+		Life = Constants.Player.MaxHp;
 	}
 }
