@@ -1,16 +1,11 @@
-﻿using System.Globalization;
-using System.Text;
-using System.Text.Json;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using Microsoft.JSInterop;
 using Pokefeet2.Class;
-using Pokefeet2.Ressources;
 using static Pokefeet2.Class.PkmnFetch;
 
 namespace Pokefeet2.Components;
 
-partial class DailyGame
+partial class InfiniteGame
 {
 	#region Inject
 
@@ -20,89 +15,59 @@ partial class DailyGame
 
 	readonly Player _player = new();
 	readonly List<PokemonInfo> _pokemonList = new();
-	PokemonJson? _apiResponse;
 	List<PokemonInfo> _filteredItems = new();
 	bool _gameOver;
 	bool _gameWon;
+	bool _error;
 	bool _guessStarted;
-	string _hasWinClassic = "";
 	bool _isLoading = true;
-	IJSObjectReference? _jsRef;
 	PokemonInfo? _pokemonInfo;
 	string? _pokemonName;
 	List<PokemonInfo> _pokemons = new();
+	readonly List<PokemonInfo> _drawnPokemons = new();
+	int _correctGuesses;
 
 	string? ImgPath { get; set; }
 	string? PlayerAnswer { get; set; }
 
-	protected override async Task OnAfterRenderAsync(bool firstRender)
-	{
-		if (firstRender)
-		{
-			_jsRef = await Js.InvokeAsync<IJSObjectReference>(Constants.Javascript.Import, Constants.Javascript.ImportPath);
-			
-			if (_jsRef != null)
-			{
-				_hasWinClassic = await _jsRef.InvokeAsync<string>(Constants.Javascript.GetLocal, Constants.Javascript.HasWinClassic);
-
-				_pokemons = await PkmnFetchApi.GetAllPokemons() ?? new List<PokemonInfo>();
-				Dictionary<int, PokemonInfo> pokemonDictionary = _pokemons.ToDictionary(p => p.Id);
-
-				string? pokemonGuessesJson = await _jsRef.InvokeAsync<string>(Constants.Javascript.GetLocal, Constants.Javascript.PokemonGuesses);
-
-				if (!string.IsNullOrEmpty(pokemonGuessesJson))
-				{
-					int[]? pokemonGuesses = JsonSerializer.Deserialize<int[]>(pokemonGuessesJson);
-
-					if (pokemonGuesses.Length > 0)
-					{
-						_guessStarted = true;
-						foreach (int id in pokemonGuesses)
-						{
-							if (pokemonDictionary.TryGetValue(id, out var pkmn))
-							{
-								_pokemonList.Add(pkmn);
-							}
-						}
-					}
-
-					_player.RemoveLife(_pokemonList.Count);
-				}
-			}
-
-			switch (_hasWinClassic)
-			{
-				case "1":
-					_gameWon = true;
-					break;
-				case "2":
-					_gameOver = true;
-					break;
-			}
-
-			_isLoading = false;
-			await InvokeAsync(StateHasChanged);
-		}
-	}
-
 	protected override async Task OnInitializedAsync()
 	{
-		_apiResponse = await PkmnFetchApi.GetDailyDataAsync();
+		await base.OnInitializedAsync();
 
-		if (_apiResponse == null) ImgPath = Constants.Path.DefaultFootprint;
-		if (_apiResponse?.Name == "_") ImgPath = Constants.Path.DefaultFootprint;
+		_pokemons = await PkmnFetchApi.GetAllPokemons() ?? new List<PokemonInfo>();
+		GetRandomPokemon();
+		_isLoading = false;
+		await InvokeAsync(StateHasChanged);
+	}
 
-		ImgPath = $"{Constants.Path.RootFootprint}{_apiResponse?.Name}.png";
-
-		if (_apiResponse?.Name != null)
-			_pokemonInfo = await PkmnFetchApi.GetPokemonInfo(_apiResponse.Name);
-
-		if (_pokemonInfo?.Name != null)
+	void GetRandomPokemon()
+	{
+		if (_pokemons.Count == 0)
 		{
-			_pokemonName = _pokemonInfo.Name;
-			_pokemonInfo.Name = _pokemonInfo.Name.ToLower().Trim();
-			_pokemonInfo.Name = Helper.RemoveDiacritics(_pokemonInfo.Name);
+			_error = true;
+			ImgPath = Constants.Path.DefaultFootprint;
+			return;
 		}
+
+		if (_drawnPokemons.Count == _pokemons.Count) _gameWon = true;
+		
+		var random = new Random();
+		int randomIndex;
+		do
+		{
+			randomIndex = random.Next(_pokemons.Count);
+		} while (_drawnPokemons.Contains(_pokemons[randomIndex]));
+
+		_drawnPokemons.Add(_pokemons[randomIndex]);
+		_pokemonInfo = _pokemons[randomIndex];
+
+		ImgPath = $"{Constants.Path.RootFootprint}{_pokemonInfo.Id}.png";
+		
+		if (_pokemonInfo.Name == null) return;
+
+		_pokemonName = _pokemonInfo.Name;
+		_pokemonInfo.Name = _pokemonInfo.Name.ToLower().Trim();
+		_pokemonInfo.Name = Helper.RemoveDiacritics(_pokemonInfo.Name);
 	}
 
 	string GetRowClass(PokemonInfo pokemon, string propertyName)
@@ -152,12 +117,17 @@ partial class DailyGame
 
 			PlayerAnswer = Helper.RemoveDiacritics(PlayerAnswer);
 
-			Console.WriteLine(PlayerAnswer);
+			_guessStarted = true;
+			PokemonInfo pkmn = await PkmnFetchApi.GetPokemonInfo(pokemonInfo.Id.ToString());
+			_pokemonList.Add(pkmn);
+			_filteredItems.Clear();
 
 			if (_pokemonInfo != null && PlayerAnswer.Equals(_pokemonInfo.Name))
 			{
-				_gameWon = true;
-				if (_jsRef != null) await _jsRef.InvokeVoidAsync(Constants.Javascript.SaveLocal, Constants.Javascript.HasWinClassic, "1");
+				GetRandomPokemon();
+				_pokemonList.Clear();
+				_guessStarted = false;
+				_correctGuesses++;
 			}
 			else
 			{
@@ -166,24 +136,13 @@ partial class DailyGame
 				if (_player.GetLife() == 0)
 				{
 					_gameOver = true;
-					if (_jsRef != null) await _jsRef.InvokeVoidAsync(Constants.Javascript.SaveLocal, Constants.Javascript.HasWinClassic, "2");
+					_pokemonList.Clear();
+					_guessStarted = false;
 				}
 			}
-
-			PokemonInfo pkmn = await PkmnFetchApi.GetPokemonInfo(pokemonInfo.Id.ToString());
-			_pokemonList.Add(pkmn);
-
-			if (_jsRef != null)
-			{
-				if (pkmn != null)
-					await _jsRef.InvokeVoidAsync(Constants.Javascript.AddPokemonGuess, pkmn.Id);
-			}
-
-			_filteredItems.Clear();
 		}
 
 		PlayerAnswer = string.Empty;
-		_guessStarted = true;
 	}
 
 	async Task ValidSubmit(KeyboardEventArgs keyboardEventArgs)
@@ -200,5 +159,20 @@ partial class DailyGame
 
 		PlayerAnswer = _filteredItems.First().Name;
 		await SubmitAnswer(_filteredItems.First());
+	}
+
+	void ResetGame()
+	{
+		_isLoading = true;
+		_player.Reset();
+		_gameOver = false;
+		_gameWon = false;
+		_pokemonList.Clear();
+		_drawnPokemons.Clear();
+		_correctGuesses = 0;
+		_guessStarted = false;
+		GetRandomPokemon();
+		_isLoading = false;
+		InvokeAsync(StateHasChanged);
 	}
 }

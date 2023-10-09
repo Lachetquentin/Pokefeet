@@ -30,4 +30,5 @@ partial class Index
 	void Close() => _visible = false;
 	void OpenDialog() => _visible = true;
 	void StartDaily() => Navigation.NavigateTo(Constants.Url.Daily);
+	void StartInfinite() => Navigation.NavigateTo(Constants.Url.Infinite);
 }

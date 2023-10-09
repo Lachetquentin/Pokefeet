@@ -201,4 +201,10 @@ Mettez vos connaissances en matière de Pokémon à l'épreuve et voyez combien 
   <data name="Player" xml:space="preserve">
     <value>Dresseur</value>
   </data>
+  <data name="Infinite" xml:space="preserve">
+    <value>Jeu libre</value>
+  </data>
+  <data name="Replay" xml:space="preserve">
+    <value>Rejouer</value>
+  </data>
 </root>

@@ -45,7 +45,7 @@ else
 				@foreach (var item in _filteredItems)
 				{
 					<div @onclick="() => SelectItem(item)" style="height: 52px;" class="d-flex align-center">
-						<img style="width: 70px; height: 70px; margin-left: 1.25rem;" src="@GetPokemonImg(item.Id)" alt="@item.Name" />
+						<img style="width: 70px; height: 70px; margin-left: 1.25rem;" src="@Helper.GetPokemonImg(item.Id)" alt="@item.Name" />
 						<p style="margin-left: 1.25rem;" class="pkmnBody">
 							@item.Name
 						</p>
@@ -73,13 +73,13 @@ else
 				{
 					<div class="header-container pkmnText">
 						<div class="row-card">
-							<img src="@GetPokemonImg(pokemon.Id)" alt="@pokemon.Name" />
+							<img src="@Helper.GetPokemonImg(pokemon.Id)" alt="@pokemon.Name" />
 						</div>
 						<div class="@GetRowClass(pokemon, Constants.PokemonCategories.Type1)">@pokemon.Type1</div>
 						<div class="@GetRowClass(pokemon,Constants.PokemonCategories.Type2)">@pokemon.Type2</div>
 						<div class="@GetRowClass(pokemon, Constants.PokemonCategories.Color)">@pokemon.Color</div>
-						<div class="@GetRowClass(pokemon, Constants.PokemonCategories.IsLegendary)">@TranslateBool(pokemon.IsLegendary)</div>
-						<div class="@GetRowClass(pokemon, Constants.PokemonCategories.IsMythical)">@TranslateBool(pokemon.IsMythical)</div>
+						<div class="@GetRowClass(pokemon, Constants.PokemonCategories.IsLegendary)">@Helper.TranslateBool(pokemon.IsLegendary)</div>
+						<div class="@GetRowClass(pokemon, Constants.PokemonCategories.IsMythical)">@Helper.TranslateBool(pokemon.IsMythical)</div>
 						<div class="@GetRowClass(pokemon, Constants.PokemonCategories.Generation)">@pokemon.Generation</div>
 					</div>
 				}

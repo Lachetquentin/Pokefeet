@@ -1,0 +1,22 @@
+﻿@using Pokefeet2.Ressources
+
+<div class="flex-grow-1 flex-column justify-center mt-16 card pa-2">
+	<MudText Typo="Typo.body1" Class="@GetColorClassH1()" Style="text-align:center;">@_title</MudText>
+	<MudText Typo="Typo.body1" Style="text-align: center; white-space: nowrap" Class="pkmnBody">
+		Vous avez deviné @NbGuessed pokemons correctement !
+		@if (HasWin)
+		{
+			<MudText Typo="Typo.body1" Class="px-2" Style="text-align: center; white-space: nowrap;">Félicitations ! Vous êtes officiellement un maître pokémon !</MudText>
+		}
+		else
+		{
+			<MudText Typo="Typo.body1" Style="text-align: center; white-space: nowrap;">Ne vous découragez pas !</MudText>
+		}
+	</MudText>
+	
+	<div class="flex-grow-1 d-flex flex-column justify-center align-center">
+		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Replay" OnClick="ReplayGame" Class="pkmnBody card btn mt-8">
+			@Translation.Replay
+		</MudButton>
+	</div>
+</div>

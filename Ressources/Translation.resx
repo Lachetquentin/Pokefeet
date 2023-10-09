@@ -203,4 +203,10 @@ Put your Pokémon knowledge to the test and see how many you can guess correctly
   <data name="Player" xml:space="preserve">
     <value>Trainer</value>
   </data>
+  <data name="Infinite" xml:space="preserve">
+    <value>Free play</value>
+  </data>
+  <data name="Replay" xml:space="preserve">
+    <value>Replay</value>
+  </data>
 </root>

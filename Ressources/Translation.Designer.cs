@@ -79,7 +79,7 @@ namespace Pokefeet2.Ressources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Click Here.
+        ///   Looks up a localized string similar to Click Here..
         /// </summary>
         public static string ClickHere {
             get {
@@ -217,6 +217,15 @@ namespace Pokefeet2.Ressources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Free play.
+        /// </summary>
+        public static string Infinite {
+            get {
+                return ResourceManager.GetString("Infinite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Legendary.
         /// </summary>
         public static string Legendary {
@@ -271,11 +280,20 @@ namespace Pokefeet2.Ressources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Trainer.
         /// </summary>
         public static string Player {
             get {
                 return ResourceManager.GetString("Player", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string Replay {
+            get {
+                return ResourceManager.GetString("Replay", resourceCulture);
             }
         }
         

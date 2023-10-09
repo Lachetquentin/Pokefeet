@@ -4,6 +4,7 @@
 @inject NavigationManager Navigation
 
 <MudGrid>
+
 	<MudItem xs="12">
 		<div class="flex-grow-1 d-flex flex-column justify-center align-center mt-16">
 			<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Today" OnClick="StartDaily" Class="mb-4 pkmnBody card btn">
@@ -11,6 +12,15 @@
 			</MudButton>
 		</div>
 	</MudItem>
+
+	<MudItem xs="12">
+		<div class="flex-grow-1 d-flex flex-column justify-center align-center">
+			<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Repeat" OnClick="StartInfinite" Class="mb-4 pkmnBody card btn">
+				@Translation.Infinite
+			</MudButton>
+		</div>
+	</MudItem>
+
 	<MudItem xs="12">
 		<div class="d-flex justify-center align-center">
 			<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Info" OnClick="OpenDialog" Class="pkmnBody card btn">
@@ -18,6 +28,7 @@
 			</MudButton>
 		</div>
 	</MudItem>
+
 </MudGrid>
 
 <MudDialog @bind-IsVisible="_visible" Options="_dialogOptions">
