@@ -6,7 +6,7 @@
 		@_desc <span class="@GetColorClass()">@PkmnName</span>
 	</MudText>
 	<div class="d-flex justify-center">
-		<MudImage Src="@GetPokemonImg(Pkmn.Id)" Width="128" Height="128" Elevation="25" Class="rounded-lg ma-4 imgSize card" />
+		<MudImage Src="@Helper.GetPokemonImg(Pkmn.Id)" Width="128" Height="128" Elevation="25" Class="rounded-lg ma-4 imgSize card" />
 	</div>
 	<MudText Typo="Typo.caption" Style="text-align:center" Class="pkmnBody2">@Translation.NextPokemonIn @_countdownTime</MudText>
 </div>

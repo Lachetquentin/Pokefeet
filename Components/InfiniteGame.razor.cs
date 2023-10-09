@@ -25,7 +25,6 @@ partial class InfiniteGame
 	string? _pokemonName;
 	List<PokemonInfo> _pokemons = new();
 	readonly List<PokemonInfo> _drawnPokemons = new();
-	int _correctGuesses;
 
 	string? ImgPath { get; set; }
 	string? PlayerAnswer { get; set; }
@@ -45,7 +44,7 @@ partial class InfiniteGame
 		if (_pokemons.Count == 0)
 		{
 			_error = true;
-			ImgPath = Constants.Path.DefaultFootprint;
+			ImgPath = ImageLoader.GetBase64Image("1", false);
 			return;
 		}
 
@@ -61,7 +60,7 @@ partial class InfiniteGame
 		_drawnPokemons.Add(_pokemons[randomIndex]);
 		_pokemonInfo = _pokemons[randomIndex];
 
-		ImgPath = $"{Constants.Path.RootFootprint}{_pokemonInfo.Id}.png";
+		ImgPath = ImageLoader.GetBase64Image(_pokemonInfo.Id.ToString(), false);
 		
 		if (_pokemonInfo.Name == null) return;
 
@@ -127,7 +126,6 @@ partial class InfiniteGame
 				GetRandomPokemon();
 				_pokemonList.Clear();
 				_guessStarted = false;
-				_correctGuesses++;
 			}
 			else
 			{
@@ -169,7 +167,6 @@ partial class InfiniteGame
 		_gameWon = false;
 		_pokemonList.Clear();
 		_drawnPokemons.Clear();
-		_correctGuesses = 0;
 		_guessStarted = false;
 		GetRandomPokemon();
 		_isLoading = false;

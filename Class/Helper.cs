@@ -23,7 +23,7 @@ public static class Helper
 		return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
 	}
 
-	public static string GetPokemonImg(int pokemonId) => $"{Constants.Path.RootSprite}{pokemonId}.png";
+	public static string GetPokemonImg(int pokemonId) => ImageLoader.GetBase64Image(pokemonId.ToString(), true);
 
 	public static string TranslateBool(bool value) => value ? Translation.Yes : Translation.No;
 }

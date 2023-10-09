@@ -77,6 +77,4 @@ partial class GameResult : IDisposable
 			InvokeAsync(StateHasChanged);
 		}
 	}
-
-	static string GetPokemonImg(int pokemonId) => $"{Constants.Path.RootSprite}{pokemonId}.png";
 }

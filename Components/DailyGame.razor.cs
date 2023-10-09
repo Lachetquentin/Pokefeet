@@ -1,11 +1,8 @@
-﻿using System.Globalization;
-using System.Text;
-using System.Text.Json;
+﻿using System.Text.Json;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using Pokefeet2.Class;
-using Pokefeet2.Ressources;
 using static Pokefeet2.Class.PkmnFetch;
 
 namespace Pokefeet2.Components;
@@ -89,10 +86,10 @@ partial class DailyGame
 	{
 		_apiResponse = await PkmnFetchApi.GetDailyDataAsync();
 
-		if (_apiResponse == null) ImgPath = Constants.Path.DefaultFootprint;
-		if (_apiResponse?.Name == "_") ImgPath = Constants.Path.DefaultFootprint;
+		if (_apiResponse == null) ImgPath = ImageLoader.GetBase64Image("1", false);
+		if (_apiResponse?.Name == "_") ImgPath = ImageLoader.GetBase64Image("1", false);
 
-		ImgPath = $"{Constants.Path.RootFootprint}{_apiResponse?.Name}.png";
+		ImgPath = ImageLoader.GetBase64Image(_apiResponse.Name, false);
 
 		if (_apiResponse?.Name != null)
 			_pokemonInfo = await PkmnFetchApi.GetPokemonInfo(_apiResponse.Name);

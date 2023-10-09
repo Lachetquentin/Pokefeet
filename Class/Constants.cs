@@ -19,17 +19,9 @@ public class Constants
 		public const string SaveLocal = "saveLocal";
 	}
 
-	public class Path
-	{
-		public const string DefaultFootprint = "/img/footprints/1.png";
-		public const string RootFootprint = "/img/footprints/";
-		public const string RootSprite = "/img/sprites/";
-	}
-
 	public class Player
 	{
 		public const int MaxHp = 8;
-		public const int Points = 0;
 	}
 
 	public class PokemonCategories

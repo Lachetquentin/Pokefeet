@@ -12,14 +12,14 @@ else
 	{
 		if (_pokemonInfo != null && _pokemonName != null) 
 		{
-			<InfiniteGameResult HasWin="@false" Pkmn="@_pokemonInfo" PkmnName="@_pokemonName" NbGuessed="_correctGuesses" ReplayGame="@ResetGame" />
+			<InfiniteGameResult HasWin="@false" Pkmn="@_pokemonInfo" PkmnName="@_pokemonName" ReplayGame="@ResetGame" />
 		}
 	} 
 	else if (_gameWon)
 	{
 		if (_pokemonInfo != null && _pokemonName != null)
 		{
-			<InfiniteGameResult HasWin="@true" Pkmn="@_pokemonInfo" PkmnName="@_pokemonName" NbGuessed="_correctGuesses"/>
+			<InfiniteGameResult HasWin="@true" Pkmn="@_pokemonInfo" PkmnName="@_pokemonName" ReplayGame="@ResetGame"/>
 		}
 	}
 	else

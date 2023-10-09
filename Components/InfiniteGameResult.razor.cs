@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Pokefeet2.Class;
 using Pokefeet2.Ressources;
 using static Pokefeet2.Class.PkmnFetch;
 
@@ -13,20 +12,28 @@ partial class InfiniteGameResult
 
 	[Parameter] public string PkmnName { get; set; } = default!;
 
-	[Parameter] public int NbGuessed { get; set; }
-
-	[Parameter] public Player Player { get; set; } = default!;
-
 	[Parameter] public Action ReplayGame { get; set; } = default!;
 
 	string _title = "";
+	string _desc = "";
 
 	protected override void OnInitialized()
 	{
 		base.OnInitialized();
 
-		_title = HasWin ? Translation.Victory.ToUpper() : Translation.Defeat.ToUpper();
+		if (HasWin)
+		{
+			_title = Translation.Victory.ToUpper();
+			_desc = Translation.YouGuessed;
+		}
+		else
+		{
+			_title = Translation.Defeat.ToUpper();
+			_desc = Translation.NoGuessed;
+		}
 	}
 
 	string GetColorClassH1() => HasWin ? "victory pkmnH1" : "defeat pkmnH1";
+
+	string GetColorClass() => HasWin ? "victory" : "defeat";
 }

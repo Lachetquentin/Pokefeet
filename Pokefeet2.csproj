@@ -12,6 +12,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.2" />
     <PackageReference Include="MudBlazor" Version="6.10.0" />
+    <PackageReference Include="SkiaSharp" Version="2.88.6" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.6" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,6 +21,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Ressources\Footprint.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Footprint.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Ressources\Img.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Img.resx</DependentUpon>
+    </Compile>
     <Compile Update="Ressources\Translation.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -27,6 +39,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Ressources\Footprint.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Footprint.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Ressources\Img.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Img.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Ressources\Translation.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Translation.Designer.cs</LastGenOutput>
