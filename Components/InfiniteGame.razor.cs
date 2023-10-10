@@ -42,7 +42,6 @@ partial class InfiniteGame
 			_pokemonDictionary = _pokemons.ToDictionary(p => p.Id);
 			GetRandomPokemon();
 			_isLoading = false;
-			_player.RemoveLife(3);
 			await InvokeAsync(StateHasChanged);
 		}
 	}
