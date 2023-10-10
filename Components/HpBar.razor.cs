@@ -6,7 +6,10 @@ namespace Pokefeet2.Components;
 partial class HpBar
 {
 	[Parameter] public int HpLeft { get; set; }
-	int _maxHp = Constants.Player.MaxHp;
+	[Parameter] public int Streak { get; set; }
+	[Parameter] public int Level { get; set; } = 1;
+
+	int _maxHp = Constants.Game.MaxHp;
 
 	static string CalculateHpPercentage(int hpLeft, int maxHp)
 	{
@@ -26,6 +29,12 @@ partial class HpBar
 		return Math.Abs(percentage - 87.5) < tolerance ? 80.0 : percentage;
 	}
 
+	int CalculateXpPercentage(int currentXp)
+	{
+		const double segmentPercentage = 100.0 / Constants.Game.MaxStrike;
+		return (int)(currentXp * segmentPercentage);
+	}
+
 	string GetHpColorClass(int hpLeft)
 	{
 		string colorClass = "hp-fill";
@@ -39,4 +48,6 @@ partial class HpBar
 			_ => colorClass += " red"
 		};
 	}
+
+	string SetLevelString() => $"Lv{Level}";
 }

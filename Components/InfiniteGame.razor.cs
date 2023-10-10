@@ -25,40 +25,62 @@ partial class InfiniteGame
 	string? _pokemonName;
 	List<PokemonInfo> _pokemons = new();
 	readonly List<PokemonInfo> _drawnPokemons = new();
+	Dictionary<int, PokemonInfo> _pokemonDictionary = new();
+
+	int _streak;
+	int _pkmnCount;
+	int _level = 1;
 
 	string? ImgPath { get; set; }
 	string? PlayerAnswer { get; set; }
 
-	protected override async Task OnInitializedAsync()
+	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		await base.OnInitializedAsync();
-
-		_pokemons = await PkmnFetchApi.GetAllPokemons() ?? new List<PokemonInfo>();
-		GetRandomPokemon();
-		_isLoading = false;
-		await InvokeAsync(StateHasChanged);
+		if (firstRender)
+		{
+			_pokemons = await PkmnFetchApi.GetAllPokemons() ?? new List<PokemonInfo>();
+			_pokemonDictionary = _pokemons.ToDictionary(p => p.Id);
+			GetRandomPokemon();
+			_isLoading = false;
+			_player.RemoveLife(3);
+			await InvokeAsync(StateHasChanged);
+		}
 	}
 
 	void GetRandomPokemon()
 	{
-		if (_pokemons.Count == 0)
+		if (_pokemonDictionary.Count == 0)
 		{
 			_error = true;
 			ImgPath = ImageLoader.GetBase64Image("1", false);
 			return;
 		}
 
-		if (_drawnPokemons.Count == _pokemons.Count) _gameWon = true;
+		if (_drawnPokemons.Count == _pokemonDictionary.Count) _gameWon = true;
 		
 		var random = new Random();
 		int randomIndex;
 		do
 		{
-			randomIndex = random.Next(_pokemons.Count);
-		} while (_drawnPokemons.Contains(_pokemons[randomIndex]));
+			randomIndex = random.Next(_pokemonDictionary.Count);
+		} while (_drawnPokemons.Contains(_pokemonDictionary[randomIndex]));
 
-		_drawnPokemons.Add(_pokemons[randomIndex]);
-		_pokemonInfo = _pokemons[randomIndex];
+		var pkmnInfo = _pokemonDictionary[randomIndex];
+
+		_drawnPokemons.Add(pkmnInfo);
+
+		_pokemonInfo = new PokemonInfo
+		{
+			Id = pkmnInfo.Id,
+			Name = pkmnInfo.Name,
+			Type1 = pkmnInfo.Type1,
+			Type2 = pkmnInfo.Type2,
+			Color = pkmnInfo.Color,
+			ImgUrl = pkmnInfo.ImgUrl,
+			Generation = pkmnInfo.Generation,
+			IsLegendary = pkmnInfo.IsLegendary,
+			IsMythical = pkmnInfo.IsMythical
+		};
 
 		ImgPath = ImageLoader.GetBase64Image(_pokemonInfo.Id.ToString(), false);
 		
@@ -102,13 +124,13 @@ partial class InfiniteGame
 				.ToList();
 	}
 
-	async Task SelectItem(PokemonInfo selectedItem)
+	void SelectItem(PokemonInfo selectedItem)
 	{
 		PlayerAnswer = selectedItem.Name;
-		await SubmitAnswer(selectedItem);
+		SubmitAnswer(selectedItem);
 	}
 
-	async Task SubmitAnswer(PokemonInfo pokemonInfo)
+	void SubmitAnswer(PokemonInfo pokemonInfo)
 	{
 		if (PlayerAnswer != null)
 		{
@@ -117,15 +139,32 @@ partial class InfiniteGame
 			PlayerAnswer = Helper.RemoveDiacritics(PlayerAnswer);
 
 			_guessStarted = true;
-			PokemonInfo pkmn = await PkmnFetchApi.GetPokemonInfo(pokemonInfo.Id.ToString());
+
+			PokemonInfo pkmn = _pokemonDictionary.FirstOrDefault(p => p.Value.Id == pokemonInfo.Id).Value;
 			_pokemonList.Add(pkmn);
 			_filteredItems.Clear();
 
 			if (_pokemonInfo != null && PlayerAnswer.Equals(_pokemonInfo.Name))
 			{
-				GetRandomPokemon();
-				_pokemonList.Clear();
-				_guessStarted = false;
+				_gameWon = true;
+				_streak++;
+				_pkmnCount++;
+    
+				const int maxHp = Constants.Game.MaxHp;
+				const int maxStrike = Constants.Game.MaxStrike;
+				int currentHp = _player.GetLife();
+    
+				if (currentHp < maxHp)
+				{
+					int hpToAdd = Math.Min(maxHp - currentHp, _streak == maxStrike ? 3 : 1);
+					_player.AddLife(hpToAdd);
+				}
+
+				if (_streak == maxStrike)
+				{
+					_level++;
+					_streak = 0;
+				}
 			}
 			else
 			{
@@ -143,7 +182,7 @@ partial class InfiniteGame
 		PlayerAnswer = string.Empty;
 	}
 
-	async Task ValidSubmit(KeyboardEventArgs keyboardEventArgs)
+	void ValidSubmit(KeyboardEventArgs keyboardEventArgs)
 	{
 		Search();
 
@@ -156,7 +195,7 @@ partial class InfiniteGame
 		}
 
 		PlayerAnswer = _filteredItems.First().Name;
-		await SubmitAnswer(_filteredItems.First());
+		SubmitAnswer(_filteredItems.First());
 	}
 
 	void ResetGame()
@@ -167,6 +206,20 @@ partial class InfiniteGame
 		_gameWon = false;
 		_pokemonList.Clear();
 		_drawnPokemons.Clear();
+		_guessStarted = false;
+		_pkmnCount = 0;
+		_streak = 0;
+		GetRandomPokemon();
+		_isLoading = false;
+		InvokeAsync(StateHasChanged);
+	}
+
+	void ContinueGame()
+	{
+		_isLoading = true;
+		_gameOver = false;
+		_gameWon = false;
+		_pokemonList.Clear();
 		_guessStarted = false;
 		GetRandomPokemon();
 		_isLoading = false;

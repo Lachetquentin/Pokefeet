@@ -1,9 +1,10 @@
 ﻿@using Pokefeet2.Ressources
+
 <div class="pokemon-life-bar d-flex flex-column card pl-4 pr-2">
 	
 	<div class="text-container" style="width: 100%;">
 		<div class="left-text pkmnText">@Translation.Player.ToUpper()</div>
-		<div class="right-text pkmnText">Lv1</div>
+		<div class="right-text pkmnText">@SetLevelString()</div>
 	</div>
 
 	<div class="hp-bar">
@@ -12,6 +13,11 @@
 	</div>
 
 	<MudText Typo="Typo.body1" Class="pkmnText" Align="Align.Right" Style="Width: 100%;">@HpLeft / @_maxHp</MudText>
+	
+	<div class="hp-bar mb-2">
+		<div class="xp-label pr-1">EXP</div>
+		<div class="xp-fill" style="width: @CalculateXpPercentage(Streak)%"></div>
+	</div>
 
 </div>
 
@@ -29,6 +35,15 @@
 	.right-text {
 		flex: 1; 
 		text-align: right;
+	}
+
+	.xp-fill {
+		background-color: #0D6EF5; 
+		height: 100%;
+		transition: width 0.5s;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 
 </style>

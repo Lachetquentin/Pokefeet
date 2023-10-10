@@ -28,6 +28,7 @@ partial class DailyGame
 	PokemonInfo? _pokemonInfo;
 	string? _pokemonName;
 	List<PokemonInfo> _pokemons = new();
+	Dictionary<int, PokemonInfo> _pokemonDictionary = new();
 
 	string? ImgPath { get; set; }
 	string? PlayerAnswer { get; set; }
@@ -36,14 +37,45 @@ partial class DailyGame
 	{
 		if (firstRender)
 		{
+			_apiResponse = await PkmnFetchApi.GetDailyDataAsync();
+			_pokemons = await PkmnFetchApi.GetAllPokemons() ?? new List<PokemonInfo>();
+			_pokemonDictionary = _pokemons.ToDictionary(p => p.Id);
+
+			if (_apiResponse == null) ImgPath = ImageLoader.GetBase64Image("1", false);
+			if (_apiResponse?.Name == "_") ImgPath = ImageLoader.GetBase64Image("1", false);
+
+			ImgPath = ImageLoader.GetBase64Image(_apiResponse.Name, false);
+
+			if (_apiResponse?.Name != null)
+			{
+				var pkmnInfo = _pokemonDictionary.FirstOrDefault(p => p.Value.Id.ToString().Equals(_apiResponse.Name)).Value;
+
+				_pokemonInfo = new PokemonInfo
+				{
+					Id = pkmnInfo.Id,
+					Name = pkmnInfo.Name,
+					Type1 = pkmnInfo.Type1,
+					Type2 = pkmnInfo.Type2,
+					Color = pkmnInfo.Color,
+					ImgUrl = pkmnInfo.ImgUrl,
+					Generation = pkmnInfo.Generation,
+					IsLegendary = pkmnInfo.IsLegendary,
+					IsMythical = pkmnInfo.IsMythical
+				};
+			}
+		
+			if (_pokemonInfo?.Name != null)
+			{
+				_pokemonName = _pokemonInfo.Name;
+				_pokemonInfo.Name = _pokemonInfo.Name.ToLower().Trim();
+				_pokemonInfo.Name = Helper.RemoveDiacritics(_pokemonInfo.Name);
+			}
+			
 			_jsRef = await Js.InvokeAsync<IJSObjectReference>(Constants.Javascript.Import, Constants.Javascript.ImportPath);
 			
 			if (_jsRef != null)
 			{
 				_hasWinClassic = await _jsRef.InvokeAsync<string>(Constants.Javascript.GetLocal, Constants.Javascript.HasWinClassic);
-
-				_pokemons = await PkmnFetchApi.GetAllPokemons() ?? new List<PokemonInfo>();
-				Dictionary<int, PokemonInfo> pokemonDictionary = _pokemons.ToDictionary(p => p.Id);
 
 				string? pokemonGuessesJson = await _jsRef.InvokeAsync<string>(Constants.Javascript.GetLocal, Constants.Javascript.PokemonGuesses);
 
@@ -56,7 +88,7 @@ partial class DailyGame
 						_guessStarted = true;
 						foreach (int id in pokemonGuesses)
 						{
-							if (pokemonDictionary.TryGetValue(id, out var pkmn))
+							if (_pokemonDictionary.TryGetValue(id, out var pkmn))
 							{
 								_pokemonList.Add(pkmn);
 							}
@@ -79,26 +111,6 @@ partial class DailyGame
 
 			_isLoading = false;
 			await InvokeAsync(StateHasChanged);
-		}
-	}
-
-	protected override async Task OnInitializedAsync()
-	{
-		_apiResponse = await PkmnFetchApi.GetDailyDataAsync();
-
-		if (_apiResponse == null) ImgPath = ImageLoader.GetBase64Image("1", false);
-		if (_apiResponse?.Name == "_") ImgPath = ImageLoader.GetBase64Image("1", false);
-
-		ImgPath = ImageLoader.GetBase64Image(_apiResponse.Name, false);
-
-		if (_apiResponse?.Name != null)
-			_pokemonInfo = await PkmnFetchApi.GetPokemonInfo(_apiResponse.Name);
-
-		if (_pokemonInfo?.Name != null)
-		{
-			_pokemonName = _pokemonInfo.Name;
-			_pokemonInfo.Name = _pokemonInfo.Name.ToLower().Trim();
-			_pokemonInfo.Name = Helper.RemoveDiacritics(_pokemonInfo.Name);
 		}
 	}
 
@@ -167,7 +179,7 @@ partial class DailyGame
 				}
 			}
 
-			PokemonInfo pkmn = await PkmnFetchApi.GetPokemonInfo(pokemonInfo.Id.ToString());
+			PokemonInfo pkmn = _pokemonDictionary.FirstOrDefault(p => p.Value.Id == pokemonInfo.Id).Value;
 			_pokemonList.Add(pkmn);
 
 			if (_jsRef != null)

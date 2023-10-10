@@ -19,9 +19,10 @@ public class Constants
 		public const string SaveLocal = "saveLocal";
 	}
 
-	public class Player
+	public class Game
 	{
 		public const int MaxHp = 8;
+		public const int MaxStrike = 3;
 	}
 
 	public class PokemonCategories

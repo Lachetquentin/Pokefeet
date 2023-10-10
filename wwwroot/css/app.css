@@ -128,10 +128,17 @@ input {
     overflow: hidden;
 }
 
+.xp-label {
+    font-weight: bold;
+    margin-left: 8px;
+    color: yellow;
+}
+
 .hp-label {
     font-weight: bold;
     margin-left: 8px;
     color: orange;
+    background-color: black;
 }
 
 .hp-fill {

@@ -14,6 +14,8 @@ partial class InfiniteGameResult
 
 	[Parameter] public Action ReplayGame { get; set; } = default!;
 
+	[Parameter] public int PkmnCount { get; set; }
+
 	string _title = "";
 	string _desc = "";
 
