@@ -161,8 +161,6 @@ partial class DailyGame
 
 			PlayerAnswer = Helper.RemoveDiacritics(PlayerAnswer);
 
-			Console.WriteLine(PlayerAnswer);
-
 			if (_pokemonInfo != null && PlayerAnswer.Equals(_pokemonInfo.Name))
 			{
 				_gameWon = true;
