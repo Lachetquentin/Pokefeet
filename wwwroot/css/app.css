@@ -91,7 +91,6 @@ input {
     border-width: 2px;
     border-style: solid;
     border-color: black;
-    background-color: white;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -107,9 +106,9 @@ input {
         background-color: rgb(237, 59, 43);
     }
     
-.row-card.orange {
-    background-color: orange;
-}
+    .row-card.orange {
+        background-color: orange;
+    }
 
 /* HP BAR */
 
