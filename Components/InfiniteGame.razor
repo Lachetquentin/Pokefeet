@@ -24,7 +24,7 @@ else
 	}
 	else
 	{
-		<div class="flex-grow-1 d-flex flex-column justify-center mt-16">
+		<div class="mt-16">
 
 			<div class="d-flex justify-center">
 				<HpBar HpLeft="_player.GetLife()" Streak="_streak" Level="_level" />
@@ -43,10 +43,12 @@ else
 			<div class="@GetSearchClass()" style="max-height: 150px; overflow-y: auto;">
 				@foreach (var item in _filteredItems)
 				{
-					<div @onclick="() => SelectItem(item)" style="height: 52px;" class="d-flex align-center">
+					<div @onclick="() => SelectItem(item)" style="height: 70px;" class="d-flex align-center">
 						<img style="width: 70px; height: 70px; margin-left: 1.25rem;" src="@Helper.GetPokemonImg(item.Id)" alt="@item.Name" />
 						<p style="margin-left: 1.25rem;" class="pkmnBody">
-							@item.Name
+							@item.Name 
+							<br/>
+							<p class="pkmnText">Gen @item.Generation, @item.Type1/@item.Type2</p>
 						</p>
 					</div>
 				}
@@ -74,8 +76,8 @@ else
 					<div class="row-card">
 						<img src="@Helper.GetPokemonImg(pokemon.Id)" alt="@pokemon.Name" />
 					</div>
-					<div class="@GetRowClass(pokemon, Constants.PokemonCategories.Type1)">@pokemon.Type1</div>
-					<div class="@GetRowClass(pokemon,Constants.PokemonCategories.Type2)">@pokemon.Type2</div>
+					<div class="@GetTypeRowClass(pokemon, Constants.PokemonCategories.Type1)">@pokemon.Type1</div>
+					<div class="@GetTypeRowClass(pokemon,Constants.PokemonCategories.Type2)">@pokemon.Type2</div>
 					<div class="@GetRowClass(pokemon, Constants.PokemonCategories.Color)">@pokemon.Color</div>
 					<div class="@GetRowClass(pokemon, Constants.PokemonCategories.IsLegendary)">@Helper.TranslateBool(pokemon.IsLegendary)</div>
 					<div class="@GetRowClass(pokemon, Constants.PokemonCategories.IsMythical)">@Helper.TranslateBool(pokemon.IsMythical)</div>

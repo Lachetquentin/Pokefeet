@@ -133,6 +133,51 @@ partial class DailyGame
 		}
 	}
 
+	string GetTypeRowClass(PokemonInfo pokemon, string propertyName)
+	{
+		const string green = "row-card green";
+		const string red = "row-card red";
+		const string orange = "row-card orange";
+
+		if (_pokemonInfo == null)
+		{
+			return red; // Handle the case where _pokemonInfo is null.
+		}
+
+		switch (propertyName)
+		{
+			case Constants.PokemonCategories.Type1:
+				if (Helper.AreTypesEqual(pokemon.Type1, _pokemonInfo.Type1))
+				{
+					return green;
+				}
+				else if (Helper.AreTypesEqual(pokemon.Type1, _pokemonInfo.Type2))
+				{
+					return orange;
+				}
+				else
+				{
+					return red;
+				}
+			case Constants.PokemonCategories.Type2:
+				if (Helper.AreTypesEqual(pokemon.Type2, _pokemonInfo.Type2))
+				{
+					return green;
+				}
+				else if (Helper.AreTypesEqual(pokemon.Type2, _pokemonInfo.Type1))
+				{
+					return orange;
+				}
+				else
+				{
+					return red;
+				}
+
+			default:
+				return red;
+		}
+	}
+
 	string GetSearchClass() => _filteredItems.Count > 0 ? "card-search mt-1" : "";
 
 	void GoBack() => Navigation.NavigateTo(Constants.Url.Home);

@@ -97,13 +97,41 @@ partial class InfiniteGame
 
 		switch (propertyName)
 		{
-			case Constants.PokemonCategories.Type1 when _pokemonInfo != null && pokemon.Type1 == _pokemonInfo.Type1:
-			case Constants.PokemonCategories.Type2 when _pokemonInfo != null && pokemon.Type2 == _pokemonInfo.Type2:
 			case Constants.PokemonCategories.Color when _pokemonInfo != null && pokemon.Color == _pokemonInfo.Color:
 			case Constants.PokemonCategories.IsLegendary when _pokemonInfo != null && pokemon.IsLegendary == _pokemonInfo.IsLegendary:
 			case Constants.PokemonCategories.IsMythical when _pokemonInfo != null && pokemon.IsMythical == _pokemonInfo.IsMythical:
 			case Constants.PokemonCategories.Generation when _pokemonInfo != null && pokemon.Generation == _pokemonInfo.Generation:
 				return green;
+			default:
+				return red;
+		}
+	}
+
+	string GetTypeRowClass(PokemonInfo pokemon, string propertyName)
+	{
+		const string green = "row-card green";
+		const string red = "row-card red";
+		const string orange = "row-card orange";
+
+		if (_pokemonInfo == null)
+			return red;
+		
+		switch (propertyName)
+		{
+			case Constants.PokemonCategories.Type1:
+
+				if (Helper.AreTypesEqual(pokemon.Type1, _pokemonInfo.Type1))
+					return green;
+				
+				return Helper.AreTypesEqual(pokemon.Type1, _pokemonInfo.Type2) ? orange : red;
+
+			case Constants.PokemonCategories.Type2:
+
+				if (Helper.AreTypesEqual(pokemon.Type2, _pokemonInfo.Type2))
+					return green;
+				
+				return Helper.AreTypesEqual(pokemon.Type2, _pokemonInfo.Type1) ? orange : red;
+
 			default:
 				return red;
 		}

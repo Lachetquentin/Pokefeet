@@ -26,4 +26,6 @@ public static class Helper
 	public static string GetPokemonImg(int pokemonId) => ImageLoader.GetBase64Image(pokemonId.ToString(), true);
 
 	public static string TranslateBool(bool value) => value ? Translation.Yes : Translation.No;
+
+	public static bool AreTypesEqual(string type1, string type2) => type1 == type2;
 }

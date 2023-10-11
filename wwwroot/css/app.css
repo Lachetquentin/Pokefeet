@@ -60,7 +60,6 @@ input {
     display: grid;
     gap: 10px;
     white-space: nowrap;
-    max-width: 700px;
 }
 
 .header-container {
@@ -107,6 +106,10 @@ input {
     .row-card.red {
         background-color: rgb(237, 59, 43);
     }
+    
+.row-card.orange {
+    background-color: orange;
+}
 
 /* HP BAR */
 
