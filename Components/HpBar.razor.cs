@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Pokefeet2.Class;
+using Pokefeet.Class;
 
-namespace Pokefeet2.Components;
+namespace Pokefeet.Components;
 
 partial class HpBar
 {

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Pokefeet2.Ressources {
+namespace Pokefeet.Ressources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Pokefeet2.Ressources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Pokefeet2.Ressources.Img", typeof(Img).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Pokefeet.Ressources.Img", typeof(Img).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

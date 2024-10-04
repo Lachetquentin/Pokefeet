@@ -1,8 +1,8 @@
-﻿using Pokefeet2.Ressources;
+﻿using Pokefeet.Ressources;
 using System.Diagnostics;
 using SkiaSharp;
 
-namespace Pokefeet2.Class;
+namespace Pokefeet.Class;
 
 public static class ImageLoader
 {

@@ -1,8 +1,8 @@
 ﻿using Microsoft.JSInterop;
 using MudBlazor;
-using Pokefeet2.Class;
+using Pokefeet.Class;
 
-namespace Pokefeet2.Pages;
+namespace Pokefeet.Pages;
 
 partial class Index
 {

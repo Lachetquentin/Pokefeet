@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "Pokefeet2": {
+    "Pokefeet": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

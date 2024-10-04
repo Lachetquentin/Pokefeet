@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
 using System.Text;
-using Pokefeet2.Ressources;
+using Pokefeet.Ressources;
 
-namespace Pokefeet2.Class;
+namespace Pokefeet.Class;
 
 public static class Helper
 {

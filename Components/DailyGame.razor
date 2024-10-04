@@ -1,4 +1,4 @@
-﻿@using Pokefeet2.Ressources
+﻿@using Pokefeet.Ressources
 @inject NavigationManager Navigation
 @inject IJSRuntime Js
 @attribute [Route(Constants.Url.Daily)]
@@ -36,10 +36,10 @@ else
 			</div>
 
 			<MudTextField @bind-Value="PlayerAnswer" T="string" 
-			              OnKeyUp="ValidSubmit" Immediate="true"
-			              DisableUnderLine="true" Placeholder="@Translation.WhosThatPokemon"
-			              Class="ml-2 mr-2 card" Variant="Variant.Outlined" 
-			              AutoFocus TextUpdateSuppression="false" Margin="Margin.None" />
+				OnKeyUp="ValidSubmit" Immediate="true"
+				DisableUnderLine="true" Placeholder="@Translation.WhosThatPokemon"
+				Class="ml-2 mr-2 card" Variant="Variant.Outlined" 
+				AutoFocus TextUpdateSuppression="false" Margin="Margin.None" />
 
 			<div class="@GetSearchClass()" style="max-height: 150px; overflow-y: auto;">
 				@foreach (var item in _filteredItems)
@@ -49,7 +49,7 @@ else
 						<p style="margin-left: 1.25rem;" class="pkmnBody">
 							@item.Name
 							<br />
-						<p class="pkmnText">Gen @item.Generation, @item.Type1/@item.Type2</p>
+							<p class="pkmnText">Gen @item.Generation, @item.Type1/@item.Type2</p>
 						</p>
 					</div>
 				}

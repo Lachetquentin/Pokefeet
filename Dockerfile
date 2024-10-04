@@ -7,16 +7,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["Pokefeet2.csproj", "."]
-RUN dotnet restore "./Pokefeet2.csproj"
+COPY ["Pokefeet.csproj", "."]
+RUN dotnet restore "./Pokefeet.csproj"
 COPY . .
 WORKDIR "/src/."
-RUN dotnet build "Pokefeet2.csproj" -c Release -o /app/build
+RUN dotnet build "Pokefeet.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Pokefeet2.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Pokefeet.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Pokefeet2.dll"]
+ENTRYPOINT ["dotnet", "Pokefeet.dll"]

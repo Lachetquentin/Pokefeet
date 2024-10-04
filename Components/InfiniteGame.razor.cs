@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using Pokefeet2.Class;
-using static Pokefeet2.Class.PkmnFetch;
+using Pokefeet.Class;
+using static Pokefeet.Class.PkmnFetch;
 
-namespace Pokefeet2.Components;
+namespace Pokefeet.Components;
 
 partial class InfiniteGame
 {

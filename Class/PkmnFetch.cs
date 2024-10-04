@@ -1,4 +1,4 @@
-﻿namespace Pokefeet2.Class;
+﻿namespace Pokefeet.Class;
 
 public class PkmnFetch
 {

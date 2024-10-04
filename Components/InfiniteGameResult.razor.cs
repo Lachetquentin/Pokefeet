@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Pokefeet2.Ressources;
-using static Pokefeet2.Class.PkmnFetch;
+using Pokefeet.Ressources;
+using static Pokefeet.Class.PkmnFetch;
 
-namespace Pokefeet2.Components;
+namespace Pokefeet.Components;
 
 partial class InfiniteGameResult
 {

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.AspNetCore.Localization;
 using MudBlazor.Services;
-using Pokefeet2.Class;
+using Pokefeet.Class;
 
 var builder = WebApplication.CreateBuilder(args);
 
