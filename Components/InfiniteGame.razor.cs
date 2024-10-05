@@ -51,9 +51,10 @@ partial class InfiniteGame
 		else if (item.Id == 5) // Max Potion
 			_player.Reset();
 		else if(item.Type == PkItemType.Medicine)
-			_player.SetLife((int)item.HealingAmount);
+			_player.AddLife((int)item.HealingAmount);
 
 		OpenOrCloseShop(false);
+		InvokeAsync(StateHasChanged);
 	}
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
