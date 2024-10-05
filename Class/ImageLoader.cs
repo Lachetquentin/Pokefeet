@@ -38,7 +38,7 @@ public static class ImageLoader
 		string base64 = GetBase64Image(byteArray, SKEncodedImageFormat.Png);
 
 		imageDictionary[imageName] = base64;
-    
+	
 		return base64;
 	}
 

@@ -8,7 +8,7 @@ partial class HpBar
 	[Parameter] public int HpLeft { get; set; }
 	[Parameter] public int Streak { get; set; }
 	[Parameter] public int Level { get; set; } = 1;
-
+	
 	int _maxHp = Constants.Game.MaxHp;
 
 	static string CalculateHpPercentage(int hpLeft, int maxHp)
