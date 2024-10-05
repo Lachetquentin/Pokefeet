@@ -10,4 +10,5 @@ public class Player
 	public void RemoveLife() => Life--;
 	public void RemoveLife(int hp) => Life -= hp;
 	public void Reset() => Life = Constants.Game.MaxHp;
+	public void SetLife(int hp) => Life = hp;
 }

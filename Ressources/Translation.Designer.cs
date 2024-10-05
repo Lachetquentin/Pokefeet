@@ -316,6 +316,15 @@ namespace Pokefeet.Ressources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Poké Mart.
+        /// </summary>
+        public static string Shop {
+            get {
+                return ResourceManager.GetString("Shop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Source Code:.
         /// </summary>
         public static string SourceCode {

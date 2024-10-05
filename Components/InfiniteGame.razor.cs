@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components.Web;
+using MudBlazor;
 using Pokefeet.Class;
 using static Pokefeet.Class.PokemonData;
+using static Pokefeet.Class.PkShopItem;
 
 namespace Pokefeet.Components;
 
@@ -19,16 +21,40 @@ partial class InfiniteGame
 	List<PokemonInfo> _pokemons = [];
 	readonly List<PokemonInfo> _drawnPokemons = [];
 	Dictionary<int, PokemonInfo> _pokemonDictionary = [];
+	List<PkShopItem> _shopItems = [];
 
 	int _streak;
 	int _pkmnCount;
 	int _level = 1;
+	int _pokedollars = 0;
+	bool _isShopOpen = false;
+
+	readonly DialogOptions _dialogOptions = new() { FullWidth = true };
 
 	const int maxHp = Constants.Game.MaxHp;
 	const int maxStrike = Constants.Game.MaxStrike;
 
 	string? ImgPath { get; set; }
 	string? PlayerAnswer { get; set; }
+
+	string GetShopIcon()
+		=> "<image width=\"20\" height=\"20\" xlink:href=\"/img/shop.png\" />";
+
+	void OpenOrCloseShop(bool state) => _isShopOpen = state;
+
+	private void OnItemBought(PkShopItem item)
+	{
+		_pokedollars -= item.Price;
+
+		if (item.Id == 1) // Fluffy tails
+			ContinueGame();
+		else if (item.Id == 5) // Max Potion
+			_player.Reset();
+		else if(item.Type == PkItemType.Medicine)
+			_player.SetLife((int)item.HealingAmount);
+
+		OpenOrCloseShop(false);
+	}
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
@@ -37,6 +63,7 @@ partial class InfiniteGame
 			_pokemons = GetAllPokemons();
 			_pokemonDictionary = _pokemons.ToDictionary(p => p.Id);
 			GetRandomPokemon();
+			_shopItems = GetShopItems();
 			_isLoading = false;
 			await InvokeAsync(StateHasChanged);
 		}
@@ -51,7 +78,7 @@ partial class InfiniteGame
 		}
 
 		if (_drawnPokemons.Count == _pokemonDictionary.Count) _gameWon = true;
-		
+
 		var random = new Random();
 		int randomIndex;
 		do
@@ -77,7 +104,7 @@ partial class InfiniteGame
 		};
 
 		ImgPath = ImageLoader.GetBase64Image(_pokemonInfo.Id.ToString(), false);
-		
+
 		_pokemonName = _pokemonInfo.Name;
 		_pokemonInfo.Name = _pokemonInfo.Name.ToLower().Trim();
 		_pokemonInfo.Name = Helper.RemoveDiacritics(_pokemonInfo.Name);
@@ -108,21 +135,21 @@ partial class InfiniteGame
 
 		if (_pokemonInfo == null)
 			return red;
-		
+
 		switch (propertyName)
 		{
 			case Constants.PokemonCategories.Type1:
 
 				if (Helper.AreTypesEqual(pokemon.Type1, _pokemonInfo.Type1))
 					return green;
-				
+
 				return Helper.AreTypesEqual(pokemon.Type1, _pokemonInfo.Type2) ? orange : red;
 
 			case Constants.PokemonCategories.Type2:
 
 				if (Helper.AreTypesEqual(pokemon.Type2, _pokemonInfo.Type2))
 					return green;
-				
+
 				return Helper.AreTypesEqual(pokemon.Type2, _pokemonInfo.Type1) ? orange : red;
 
 			default:
@@ -169,9 +196,9 @@ partial class InfiniteGame
 				_gameWon = true;
 				_streak++;
 				_pkmnCount++;
-    
+
 				int currentHp = _player.GetLife();
-    
+
 				if (currentHp < maxHp)
 				{
 					int hpToAdd = Math.Min(maxHp - currentHp, _streak == maxStrike ? 3 : 1);

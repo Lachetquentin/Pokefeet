@@ -1,0 +1,39 @@
+﻿<div class="d-flex justify-content-between">
+
+	<img class="mx-2 shopIcon" src="@Item.ImageSrc" alt="@Item.Name" />
+
+	<div class="d-flex flex-column mt-2">
+		<MudText Typo="Typo.body1" Class="pkmnBody">
+			@Item.Name
+		</MudText>
+
+		<MudText Typo="Typo.caption" Class="pkmnBody">
+			@Item.Description
+		</MudText>
+	</div>
+
+	<MudButton Variant="Variant.Text" EndIcon="@GetPkDollarsIcon()"
+			   Class="pkmnBody dollarIcon ml-auto" Disabled="@IsButtonDisabled()"
+			   OnClick="BuyItem">
+		@Item.Price
+	</MudButton>
+
+</div>
+
+<MudDivider />
+
+
+<style>
+	.shopIcon {
+		width: 50px;
+		height: 50px;
+		margin-bottom: 8px;
+	}
+
+	.dollarIcon .mud-button-icon-end {
+		margin-left: 0px !important;
+		margin-right: 0px !important;
+		margin-inline-start: 0px !important;
+		margin-inline-end: 0px !important;
+	}
+</style>

@@ -121,6 +121,9 @@
   <data name="Replay" xml:space="preserve">
     <value>Rejouer</value>
   </data>
+  <data name="Shop" xml:space="preserve">
+    <value>Boutique Pokémon</value>
+  </data>
   <data name="SourceCode" xml:space="preserve">
     <value>Code source :</value>
   </data>
