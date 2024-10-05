@@ -10,6 +10,7 @@ partial class HpBar
 	[Parameter] public int Level { get; set; } = 1;
 	
 	int _maxHp = Constants.Game.MaxHp;
+	int _maxStreak = Constants.Game.MaxStreak;
 
 	static string CalculateHpPercentage(int hpLeft, int maxHp)
 	{
@@ -31,7 +32,7 @@ partial class HpBar
 
 	int CalculateXpPercentage(int currentXp)
 	{
-		const double segmentPercentage = 100.0 / Constants.Game.MaxStrike;
+		const double segmentPercentage = 100.0 / Constants.Game.MaxStreak;
 		return (int)(currentXp * segmentPercentage);
 	}
 

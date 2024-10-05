@@ -32,7 +32,7 @@ partial class InfiniteGame
 	readonly DialogOptions _dialogOptions = new() { FullWidth = true };
 
 	const int maxHp = Constants.Game.MaxHp;
-	const int maxStrike = Constants.Game.MaxStrike;
+	const int maxStrike = Constants.Game.MaxStreak;
 
 	string? ImgPath { get; set; }
 	string? PlayerAnswer { get; set; }
@@ -255,6 +255,8 @@ partial class InfiniteGame
 		_guessStarted = false;
 		_pkmnCount = 0;
 		_streak = 0;
+		_pokedollars = 0;
+		_level = 1;
 		GetRandomPokemon();
 		_isLoading = false;
 		InvokeAsync(StateHasChanged);

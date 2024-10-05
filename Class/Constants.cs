@@ -22,7 +22,7 @@ public class Constants
 	public class Game
 	{
 		public const int MaxHp = 8;
-		public const int MaxStrike = 3;
+		public const int MaxStreak = 3;
 	}
 
 	public class PokemonCategories
