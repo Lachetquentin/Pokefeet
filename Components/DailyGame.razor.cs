@@ -1,34 +1,28 @@
 ﻿using System.Text.Json;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using Pokefeet.Class;
-using static Pokefeet.Class.PkmnFetch;
+using static Pokefeet.Class.PokemonData;
 
 namespace Pokefeet.Components;
 
 partial class DailyGame
 {
-	#region Inject
-
-	[Inject] PkmnFetch PkmnFetchApi { get; set; } = default!;
-
-	#endregion
-
 	readonly Player _player = new();
-	readonly List<PokemonInfo> _pokemonList = new();
-	PokemonJson? _apiResponse;
-	List<PokemonInfo> _filteredItems = new();
+	readonly List<PokemonInfo> _pokemonList = [];
+	PokemonDailiesInfo _dailyPokemon;
+	List<PokemonInfo> _filteredItems = [];
 	bool _gameOver;
 	bool _gameWon;
 	bool _guessStarted;
 	string _hasWinClassic = "";
 	bool _isLoading = true;
 	IJSObjectReference? _jsRef;
-	PokemonInfo? _pokemonInfo;
-	string? _pokemonName;
-	List<PokemonInfo> _pokemons = new();
-	Dictionary<int, PokemonInfo> _pokemonDictionary = new();
+	PokemonInfo _pokemonInfo;
+	string _pokemonName;
+	List<PokemonInfo> _pokemons = [];
+	Dictionary<int, PokemonInfo> _pokemonDictionary = [];
+	bool _error;
 
 	string? ImgPath { get; set; }
 	string? PlayerAnswer { get; set; }
@@ -37,39 +31,50 @@ partial class DailyGame
 	{
 		if (firstRender)
 		{
-			_apiResponse = await PkmnFetchApi.GetDailyDataAsync();
-			_pokemons = await PkmnFetchApi.GetAllPokemons() ?? new List<PokemonInfo>();
+			_pokemons = GetAllPokemons();
 			_pokemonDictionary = _pokemons.ToDictionary(p => p.Id);
+			await SetupGame();
+			_isLoading = false;
+			await InvokeAsync(StateHasChanged);
+		}
+	}
 
-			if (_apiResponse == null) ImgPath = ImageLoader.GetBase64Image("1", false);
-			if (_apiResponse?.Name == "_") ImgPath = ImageLoader.GetBase64Image("1", false);
+	async Task SetupGame()
+	{
+		_dailyPokemon = GetDailyPokemon("today");
 
-			ImgPath = ImageLoader.GetBase64Image(_apiResponse.Name, false);
+		if(_dailyPokemon.Name == "_")
+		{
+			_error = true;
+			return;
+		}
 
-			if (_apiResponse?.Name != null)
+		if (_pokemonDictionary.Count == 0)
+		{
+			_error = true;
+			return;
+		}
+
+		ImgPath = ImageLoader.GetBase64Image(_dailyPokemon.Name, false);
+
+			var pkmnInfo = _pokemonDictionary.FirstOrDefault(p => p.Value.Id.ToString().Equals(_dailyPokemon.Name)).Value;
+
+			_pokemonInfo = new PokemonInfo
 			{
-				var pkmnInfo = _pokemonDictionary.FirstOrDefault(p => p.Value.Id.ToString().Equals(_apiResponse.Name)).Value;
-
-				_pokemonInfo = new PokemonInfo
-				{
-					Id = pkmnInfo.Id,
-					Name = pkmnInfo.Name,
-					Type1 = pkmnInfo.Type1,
-					Type2 = pkmnInfo.Type2,
-					Color = pkmnInfo.Color,
-					ImgUrl = pkmnInfo.ImgUrl,
-					Generation = pkmnInfo.Generation,
-					IsLegendary = pkmnInfo.IsLegendary,
-					IsMythical = pkmnInfo.IsMythical
-				};
-			}
-		
-			if (_pokemonInfo?.Name != null)
-			{
-				_pokemonName = _pokemonInfo.Name;
-				_pokemonInfo.Name = _pokemonInfo.Name.ToLower().Trim();
-				_pokemonInfo.Name = Helper.RemoveDiacritics(_pokemonInfo.Name);
-			}
+				Id = pkmnInfo.Id,
+				Name = pkmnInfo.Name,
+				Type1 = pkmnInfo.Type1,
+				Type2 = pkmnInfo.Type2,
+				Color = pkmnInfo.Color,
+				ImgUrl = pkmnInfo.ImgUrl,
+				Generation = pkmnInfo.Generation,
+				IsLegendary = pkmnInfo.IsLegendary,
+				IsMythical = pkmnInfo.IsMythical
+			};
+			
+			_pokemonName = _pokemonInfo.Name;
+			_pokemonInfo.Name = _pokemonInfo.Name.ToLower().Trim();
+			_pokemonInfo.Name = Helper.RemoveDiacritics(_pokemonInfo.Name);
 			
 			_jsRef = await Js.InvokeAsync<IJSObjectReference>(Constants.Javascript.Import, Constants.Javascript.ImportPath);
 			
@@ -108,10 +113,6 @@ partial class DailyGame
 					_gameOver = true;
 					break;
 			}
-
-			_isLoading = false;
-			await InvokeAsync(StateHasChanged);
-		}
 	}
 
 	string GetRowClass(PokemonInfo pokemon, string propertyName)
@@ -121,12 +122,12 @@ partial class DailyGame
 
 		switch (propertyName)
 		{
-			case Constants.PokemonCategories.Type1 when _pokemonInfo != null && pokemon.Type1 == _pokemonInfo.Type1:
-			case Constants.PokemonCategories.Type2 when _pokemonInfo != null && pokemon.Type2 == _pokemonInfo.Type2:
-			case Constants.PokemonCategories.Color when _pokemonInfo != null && pokemon.Color == _pokemonInfo.Color:
-			case Constants.PokemonCategories.IsLegendary when _pokemonInfo != null && pokemon.IsLegendary == _pokemonInfo.IsLegendary:
-			case Constants.PokemonCategories.IsMythical when _pokemonInfo != null && pokemon.IsMythical == _pokemonInfo.IsMythical:
-			case Constants.PokemonCategories.Generation when _pokemonInfo != null && pokemon.Generation == _pokemonInfo.Generation:
+			case Constants.PokemonCategories.Type1 when pokemon.Type1 == _pokemonInfo.Type1:
+			case Constants.PokemonCategories.Type2 when pokemon.Type2 == _pokemonInfo.Type2:
+			case Constants.PokemonCategories.Color when pokemon.Color == _pokemonInfo.Color:
+			case Constants.PokemonCategories.IsLegendary when pokemon.IsLegendary == _pokemonInfo.IsLegendary:
+			case Constants.PokemonCategories.IsMythical when pokemon.IsMythical == _pokemonInfo.IsMythical:
+			case Constants.PokemonCategories.Generation when pokemon.Generation == _pokemonInfo.Generation:
 				return green;
 			default:
 				return red;
@@ -138,11 +139,6 @@ partial class DailyGame
 		const string green = "row-card green";
 		const string red = "row-card red";
 		const string orange = "row-card orange";
-
-		if (_pokemonInfo == null)
-		{
-			return red; // Handle the case where _pokemonInfo is null.
-		}
 
 		switch (propertyName)
 		{
@@ -185,10 +181,10 @@ partial class DailyGame
 	void Search()
 	{
 		_filteredItems = string.IsNullOrEmpty(PlayerAnswer)
-			? new List<PokemonInfo>()
+			? []
 			: _pokemons
 				.Where(item =>
-					item.Name != null && Helper.RemoveDiacritics(item.Name).StartsWith(Helper.RemoveDiacritics(PlayerAnswer), StringComparison.OrdinalIgnoreCase) && _pokemonList.All(p => p.Id != item.Id))
+					Helper.RemoveDiacritics(item.Name).StartsWith(Helper.RemoveDiacritics(PlayerAnswer), StringComparison.OrdinalIgnoreCase) && _pokemonList.All(p => p.Id != item.Id))
 				.ToList();
 	}
 
@@ -206,7 +202,7 @@ partial class DailyGame
 
 			PlayerAnswer = Helper.RemoveDiacritics(PlayerAnswer);
 
-			if (_pokemonInfo != null && PlayerAnswer.Equals(_pokemonInfo.Name))
+			if (PlayerAnswer.Equals(_pokemonInfo.Name))
 			{
 				_gameWon = true;
 				if (_jsRef != null) await _jsRef.InvokeVoidAsync(Constants.Javascript.SaveLocal, Constants.Javascript.HasWinClassic, "1");
@@ -227,8 +223,7 @@ partial class DailyGame
 
 			if (_jsRef != null)
 			{
-				if (pkmn != null)
-					await _jsRef.InvokeVoidAsync(Constants.Javascript.AddPokemonGuess, pkmn.Id);
+				await _jsRef.InvokeVoidAsync(Constants.Javascript.AddPokemonGuess, pkmn.Id);
 			}
 
 			_filteredItems.Clear();

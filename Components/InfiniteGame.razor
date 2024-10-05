@@ -8,19 +8,17 @@
 }
 else
 {
-	@if (_gameOver)
+	@if (_error)
 	{
-		if (_pokemonInfo != null && _pokemonName != null) 
-		{
-			<InfiniteGameResult HasWin="@false" Pkmn="@_pokemonInfo" PkmnName="@_pokemonName" ReplayGame="@ResetGame" PkmnCount="@_pkmnCount" />
-		}
+		<MudText Class="pkmnBody2 card d-flex justify-center">@Translation.GenericError</MudText>
+	}
+	else if (_gameOver)
+	{
+		<InfiniteGameResult HasWin="@false" Pkmn="@_pokemonInfo" PkmnName="@_pokemonName" ReplayGame="@ResetGame" PkmnCount="@_pkmnCount" />
 	} 
 	else if (_gameWon)
 	{
-		if (_pokemonInfo != null && _pokemonName != null)
-		{
-			<InfiniteGameResult HasWin="@true" Pkmn="@_pokemonInfo" PkmnName="@_pokemonName" ReplayGame="@ContinueGame" PkmnCount="@_pkmnCount" />
-		}
+		<InfiniteGameResult HasWin="@true" Pkmn="@_pokemonInfo" PkmnName="@_pokemonName" ReplayGame="@ContinueGame" PkmnCount="@_pkmnCount" />
 	}
 	else
 	{
@@ -34,7 +32,7 @@ else
 				<MudImage Src="@ImgPath" Width="128" Height="128" Elevation="25" Class="rounded-lg ma-4 imgSize card" />
 			</div>
 
-			<MudTextField @bind-Value="PlayerAnswer" T="string" Disabled="_error"
+			<MudTextField @bind-Value="PlayerAnswer" T="string"
 				OnKeyUp="ValidSubmit" Immediate="true"
 				Underline="false" Placeholder="@Translation.WhosThatPokemon"
 				Class="ml-2 mr-2 card" Variant="Variant.Outlined"

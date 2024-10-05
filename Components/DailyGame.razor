@@ -9,19 +9,17 @@
 }
 else
 {
-	@if (_gameOver)
+	@if (_error)
 	{
-		if (_pokemonInfo != null && _pokemonName != null)
-		{
-			<GameResult HasWin="@false" Pkmn="@_pokemonInfo" PkmnName="@_pokemonName"/>
-		}
+		<MudText Class="pkmnBody2 card d-flex justify-center">@Translation.GenericError</MudText>
+	}
+	else if (_gameOver)
+	{
+		<GameResult HasWin="@false" Pkmn="@_pokemonInfo" PkmnName="@_pokemonName" />
 	}
 	else if (_gameWon)
 	{
-		if (_pokemonInfo != null && _pokemonName != null)
-		{
-			<GameResult HasWin="@true" Pkmn="@_pokemonInfo" PkmnName="@_pokemonName"/>
-		}
+		<GameResult HasWin="@true" Pkmn="@_pokemonInfo" PkmnName="@_pokemonName" />
 	}
 	else
 	{

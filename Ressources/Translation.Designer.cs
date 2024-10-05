@@ -79,6 +79,15 @@ namespace Pokefeet.Ressources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Background image.
+        /// </summary>
+        public static string BackgroundImg {
+            get {
+                return ResourceManager.GetString("BackgroundImg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Click Here..
         /// </summary>
         public static string ClickHere {
@@ -204,6 +213,15 @@ namespace Pokefeet.Ressources {
         public static string Generation {
             get {
                 return ResourceManager.GetString("Generation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred during loading. Please try again later..
+        /// </summary>
+        public static string GenericError {
+            get {
+                return ResourceManager.GetString("GenericError", resourceCulture);
             }
         }
         

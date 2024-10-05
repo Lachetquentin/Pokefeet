@@ -1,35 +1,31 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+﻿using Microsoft.AspNetCore.Components.Web;
 using Pokefeet.Class;
-using static Pokefeet.Class.PkmnFetch;
+using static Pokefeet.Class.PokemonData;
 
 namespace Pokefeet.Components;
 
 partial class InfiniteGame
 {
-	#region Inject
-
-	[Inject] PkmnFetch PkmnFetchApi { get; set; } = default!;
-
-	#endregion
-
 	readonly Player _player = new();
-	readonly List<PokemonInfo> _pokemonList = new();
-	List<PokemonInfo> _filteredItems = new();
+	readonly List<PokemonInfo> _pokemonList = [];
+	List<PokemonInfo> _filteredItems = [];
 	bool _gameOver;
 	bool _gameWon;
 	bool _error;
 	bool _guessStarted;
 	bool _isLoading = true;
-	PokemonInfo? _pokemonInfo;
-	string? _pokemonName;
-	List<PokemonInfo> _pokemons = new();
-	readonly List<PokemonInfo> _drawnPokemons = new();
-	Dictionary<int, PokemonInfo> _pokemonDictionary = new();
+	PokemonInfo _pokemonInfo;
+	string _pokemonName;
+	List<PokemonInfo> _pokemons = [];
+	readonly List<PokemonInfo> _drawnPokemons = [];
+	Dictionary<int, PokemonInfo> _pokemonDictionary = [];
 
 	int _streak;
 	int _pkmnCount;
 	int _level = 1;
+
+	const int maxHp = Constants.Game.MaxHp;
+	const int maxStrike = Constants.Game.MaxStrike;
 
 	string? ImgPath { get; set; }
 	string? PlayerAnswer { get; set; }
@@ -38,7 +34,7 @@ partial class InfiniteGame
 	{
 		if (firstRender)
 		{
-			_pokemons = await PkmnFetchApi.GetAllPokemons() ?? new List<PokemonInfo>();
+			_pokemons = GetAllPokemons();
 			_pokemonDictionary = _pokemons.ToDictionary(p => p.Id);
 			GetRandomPokemon();
 			_isLoading = false;
@@ -51,7 +47,6 @@ partial class InfiniteGame
 		if (_pokemonDictionary.Count == 0)
 		{
 			_error = true;
-			ImgPath = ImageLoader.GetBase64Image("1", false);
 			return;
 		}
 
@@ -83,8 +78,6 @@ partial class InfiniteGame
 
 		ImgPath = ImageLoader.GetBase64Image(_pokemonInfo.Id.ToString(), false);
 		
-		if (_pokemonInfo.Name == null) return;
-
 		_pokemonName = _pokemonInfo.Name;
 		_pokemonInfo.Name = _pokemonInfo.Name.ToLower().Trim();
 		_pokemonInfo.Name = Helper.RemoveDiacritics(_pokemonInfo.Name);
@@ -97,10 +90,10 @@ partial class InfiniteGame
 
 		switch (propertyName)
 		{
-			case Constants.PokemonCategories.Color when _pokemonInfo != null && pokemon.Color == _pokemonInfo.Color:
-			case Constants.PokemonCategories.IsLegendary when _pokemonInfo != null && pokemon.IsLegendary == _pokemonInfo.IsLegendary:
-			case Constants.PokemonCategories.IsMythical when _pokemonInfo != null && pokemon.IsMythical == _pokemonInfo.IsMythical:
-			case Constants.PokemonCategories.Generation when _pokemonInfo != null && pokemon.Generation == _pokemonInfo.Generation:
+			case Constants.PokemonCategories.Color when pokemon.Color == _pokemonInfo.Color:
+			case Constants.PokemonCategories.IsLegendary when pokemon.IsLegendary == _pokemonInfo.IsLegendary:
+			case Constants.PokemonCategories.IsMythical when pokemon.IsMythical == _pokemonInfo.IsMythical:
+			case Constants.PokemonCategories.Generation when pokemon.Generation == _pokemonInfo.Generation:
 				return green;
 			default:
 				return red;
@@ -144,10 +137,10 @@ partial class InfiniteGame
 	void Search()
 	{
 		_filteredItems = string.IsNullOrEmpty(PlayerAnswer)
-			? new List<PokemonInfo>()
+			? []
 			: _pokemons
 				.Where(item =>
-					item.Name != null && Helper.RemoveDiacritics(item.Name).StartsWith(Helper.RemoveDiacritics(PlayerAnswer), StringComparison.OrdinalIgnoreCase) && _pokemonList.All(p => p.Id != item.Id))
+					Helper.RemoveDiacritics(item.Name).StartsWith(Helper.RemoveDiacritics(PlayerAnswer), StringComparison.OrdinalIgnoreCase) && _pokemonList.All(p => p.Id != item.Id))
 				.ToList();
 	}
 
@@ -171,14 +164,12 @@ partial class InfiniteGame
 			_pokemonList.Add(pkmn);
 			_filteredItems.Clear();
 
-			if (_pokemonInfo != null && PlayerAnswer.Equals(_pokemonInfo.Name))
+			if (PlayerAnswer.Equals(_pokemonInfo.Name))
 			{
 				_gameWon = true;
 				_streak++;
 				_pkmnCount++;
     
-				const int maxHp = Constants.Game.MaxHp;
-				const int maxStrike = Constants.Game.MaxStrike;
 				int currentHp = _player.GetLife();
     
 				if (currentHp < maxHp)

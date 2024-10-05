@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Pokefeet.Ressources;
-using static Pokefeet.Class.PkmnFetch;
+using static Pokefeet.Class.PokemonData;
 
 namespace Pokefeet.Components;
 
