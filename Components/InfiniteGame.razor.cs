@@ -196,6 +196,7 @@ partial class InfiniteGame
 				_gameWon = true;
 				_streak++;
 				_pkmnCount++;
+				_pokedollars += 2;
 
 				int currentHp = _player.GetLife();
 
